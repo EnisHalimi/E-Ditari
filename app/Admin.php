@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class Admin extends Authenticatable
 {
     use Notifiable;
@@ -29,14 +30,9 @@ class Admin extends Authenticatable
         return $this->hasMany('App\Grade');
     }
 
-    public function notices()
-    {
-        return $this->hasMany('App\Notice');
-    }
-
     public function subjects()
     {
-        return $this->hasMany('App\Subject');
+        return $this->belongsToMany('App\Subject');
     }
 
     public function schedules()
@@ -51,6 +47,11 @@ class Admin extends Authenticatable
 
     public function school()
     {
-        return $this->hasOne('App\School');
+        return $this->belongsTo('App\School');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->fathers_name} {$this->surname}";
     }
 }

@@ -12,14 +12,24 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes(['register'=> false]);
+Route::get('/','HomeController@index');
+Route::get('/admin/login','Auth\AdminLoginController@showLoginForm')->name('admin.login');
+Route::post('/admin/login','Auth\AdminLoginController@login');
+Route::post('/admin/logout','Auth\AdminLoginController@logout')->name('admin.logout');
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group( function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+Route::prefix('/admin')->name('admin.')->middleware('auth:admin')->group(function(){
+    Route::get('/dashboard','HomeController@adminIndex')->name('home');
+    Route::resource('user', 'UserController');
+    Route::resource('admin', 'AdminController');
+    Route::resource('classroom', 'ClassroomController');
+    Route::resource('subject', 'SubjectController');
+    Route::resource('school', 'SchoolController');
+    Route::resource('schedule', 'ScheduleController');
+    Route::resource('grade', 'GradeController');
+    Route::resource('notice', 'NoticeController');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/admin','HomeController@adminIndex')->name('admin.home');
-Route::post('/admin/login','AdminLoginController@login')->name('admin.login');
-Route::post('/admin/logout','AdminLoginController@logout')->name('admin.logout');

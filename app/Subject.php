@@ -13,7 +13,7 @@ class Subject extends Model
 
     public function admins()
     {
-        return $this->hasMany('App\Admin');
+        return $this->belongsToMany('App\Admin');
     }
 
     public function grades()

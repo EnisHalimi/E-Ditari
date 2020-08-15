@@ -34,11 +34,16 @@ class User extends Authenticatable
 
     public function classroom()
     {
-        return $this->hasOne('App\Classroom');
+        return $this->belongsTo('App\Classroom');
     }
 
     public function school()
     {
-        return $this->hasOne('App\School');
+        return $this->belongsTo('App\School');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->fathers_name} {$this->surname}";
     }
 }

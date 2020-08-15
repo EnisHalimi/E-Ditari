@@ -20,6 +20,8 @@ class CreateNoticesTable extends Migration
             $table->foreign('schedule_id')->references('id')->on('schedules');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('school_id');
+            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });
     }

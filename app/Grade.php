@@ -8,26 +8,26 @@ class Grade extends Model
 {
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function subject()
     {
-        return $this->hasOne('App\Subject');
+        return $this->belongsTo('App\Subject');
     }
 
     public function classroom()
     {
-        return $this->hasOne('App\Classroom');
+        return $this->belongsTo('App\Classroom');
     }
 
     public function admin()
     {
-        return $this->hasOne('App\Admin');
+        return $this->belongsTo('App\Admin');
     }
 
     public function school()
     {
-        return $this->hasOne('App\School');
+        return $this->belongsTo('App\School');
     }
 }

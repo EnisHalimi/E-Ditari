@@ -4,13 +4,39 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Auth;
 
 class AdminLoginController extends Controller
 {
 
+    use ThrottlesLogins;
+
+    public function username(){
+        return 'email';
+    }
+
+    public function __construct()
+    {
+        $this->middleware('guest:admin')->except('logout');
+    }
+
+    public function showLoginForm()
+    {
+        return view('admin.auth.login',[
+            'title' => 'Admin Login',
+            'loginRoute' => 'admin.login',
+        ]);
+    }
+
     public function login(Request $request)
     {
         $this->validator($request);
+
+        if ($this->hasTooManyLoginAttempts($request)){
+            $this->fireLockoutEvent($request);
+            return $this->sendLockoutResponse($request);
+        }
 
         if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
             return redirect()
@@ -18,12 +44,17 @@ class AdminLoginController extends Controller
                 ->with('status','You are Logged in as Admin!');
         }
 
+        $this->incrementLoginAttempts($request);
+
         return $this->loginFailed();
     }
 
     public function logout()
     {
-
+        Auth::guard('admin')->logout();
+        return redirect()
+            ->route('admin.login')
+            ->with('status','Admin has been logged out!');
     }
 
     private function validator(Request $request)

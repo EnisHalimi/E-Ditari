@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\School;
+use Auth;
 
 class SchoolController extends Controller
 {
@@ -13,7 +15,11 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        //
+        $school = School::find(Auth::user()->school_id);
+        if(Auth::guard('admin'))
+            return view('admin.school.show')->with('school',$school);
+        else
+            return redirect('/home')->with('error','No access');
     }
 
     /**
@@ -23,7 +29,7 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -34,7 +40,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -45,7 +51,7 @@ class SchoolController extends Controller
      */
     public function show($id)
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -56,7 +62,11 @@ class SchoolController extends Controller
      */
     public function edit($id)
     {
-        //
+        $school = School::find($id);
+        if(Auth::guard('admin'))
+            return view('admin.school.edit')->with('school',$school);
+        else
+            return redirect('/home')->with('error','No access');
     }
 
     /**
@@ -68,7 +78,19 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'Qyteti'=> 'required|string|min:2',
+            'Emri'=> 'required|string|min:2',
+            'Adresa'=> 'required|string|min:2',
+            'Niveli'=> 'required|string|min:2',
+        ]);
+        $school = School::find($id);
+        $school->city = $request->input('Qyteti');
+        $school->name = $request->input('Emri');
+        $school->address = $request->input('Adresa');
+        $school->level = $request->input('Niveli');
+        $school->save();
+        return redirect(route('admin.school.index'))->with('success','U ndryshua shkolla');
     }
 
     /**
@@ -79,6 +101,6 @@ class SchoolController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return redirect()->back();
     }
 }

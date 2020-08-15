@@ -23,6 +23,8 @@ class CreateSchedulesTable extends Migration
             $table->foreign('classroom_id')->references('id')->on('classrooms');
             $table->unsignedBigInteger('admin_id');
             $table->foreign('admin_id')->references('id')->on('admins');
+            $table->unsignedBigInteger('school_id');
+            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });
     }

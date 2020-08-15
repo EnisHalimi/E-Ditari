@@ -19,6 +19,7 @@ class CreateAdminsTable extends Migration
             $table->string('fathers_name');
             $table->string('surname');
             $table->date('birthday');
+            $table->char('gender', 1);
             $table->string('address');
             $table->string('city');
             $table->string('residence');

@@ -7,10 +7,40 @@ use App\Notice;
 use App\User;
 use App\Schedule;
 use Auth;
-use Mockery\Matcher\Not;
+use Redirect,Response;
+
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 class NoticeController extends Controller
 {
+
+    public function getNotices()
+    {
+        $notices = Notice::where('user_id','=',Auth::user()->id)->get();
+        $schedules = Schedule::where('classroom_id','=',Auth::user()->classroom_id)->get();
+        $data[] = [];
+        foreach($notices as $notice)
+        {
+            $data[] = array(
+                'title' => $notice->description.' - '.$notice->schedule->subject->name.' | '.$notice->schedule->time,
+                'start' => $notice->schedule->date,
+                'end' => $notice->schedule->date,
+                'backgroundColor' => '#e74a3b',
+                'borderColor' =>  '$000000'
+            );
+        }
+        foreach($schedules as $schedule)
+        {
+            $data[] = array(
+                'title' => $schedule->subject->name.' | '.$notice->schedule->time,
+                'start' => $notice->schedule->date,
+                'end' => $notice->schedule->date,
+                'backgroundColor' => '#1cc88a',
+                'borderColor' =>  '$3a3b45'
+            );
+        }
+        return Response::json($data);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,10 +49,10 @@ class NoticeController extends Controller
     public function index()
     {
         $notices = Notice::where('school_id','=',Auth::user()->school_id)->paginate(20);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-notice', 'admin'))
             return view('admin.notice.index')->with('notices',$notices);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -30,14 +60,26 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $users = User::where('school_id','=',Auth::user()->school_id)->get();
-        $schedules = Schedule::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        $classroom_id = $request->classroom_id;
+        if($classroom_id != null)
+        {
+            $schedules = Schedule::where([
+                ['school_id','=',Auth::user()->school_id],
+                ['classroom_id','=',$classroom_id],
+            ])->get();
+            $users = User::where('classroom_id','=',$classroom_id)->get();
+        }
+        else
+        {
+            $schedules = Schedule::where('school_id','=',Auth::user()->school_id)->get();
+            $users = User::where('school_id','=',Auth::user()->school_id)->get();
+        }
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-notice', 'admin'))
             return view('admin.notice.create')->with('schedules',$schedules)->with('users',$users);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -48,8 +90,11 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-notice', 'admin')){
         $this->validate($request,[
             'Pershkrimi'=> 'required',
+            'Nxenesi'=> 'required',
+            'Orari'=> 'required',
         ]);
         $notice = new Notice;
         $notice->description = $request->input('Pershkrimi');
@@ -57,7 +102,10 @@ class NoticeController extends Controller
         $notice->schedule_id = $request->input('Orari');
         $notice->school_id = Auth::user()->school_id;
         $notice->save();
-        return redirect('/admin/notice')->with('success','U shtua mungesa');
+        return redirect()->back()->with('success',__('messages.notice-add'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -69,10 +117,10 @@ class NoticeController extends Controller
     public function show($id)
     {
         $notice = Notice::find($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-notice', 'admin'))
             return view('admin.notice.show')->with('notice',$notice);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -86,10 +134,10 @@ class NoticeController extends Controller
         $users = User::where('school_id','=',Auth::user()->school_id)->get();
         $schedules = Schedule::where('school_id','=',Auth::user()->school_id)->get();
         $notice = Notice::find($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-notice', 'admin'))
             return view('admin.notice.edit')->with('schedules',$schedules)->with('users',$users)->with('notice',$notice);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -101,8 +149,11 @@ class NoticeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-notice', 'admin')){
         $this->validate($request,[
             'Pershkrimi'=> 'required',
+            'Nxenesi'=> 'required',
+            'Orari'=> 'required',
         ]);
         $notice =  Notice::find($id);
         $notice->description = $request->input('Pershkrimi');
@@ -110,7 +161,10 @@ class NoticeController extends Controller
         $notice->schedule_id = $request->input('Orari');
         $notice->school_id = Auth::user()->school_id;
         $notice->save();
-        return redirect('/admin/notice')->with('success','U ndryshua mungesa');
+        return redirect()->back()->with('success',__('messages.notice-edit'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -121,8 +175,12 @@ class NoticeController extends Controller
      */
     public function destroy($id)
     {
-        $notice = Notice::find($id);
-        $notice->delete();
-        return redirect('/admin/notice')->with('success','U fshi mungesa');
+        if(Auth::guard('admin')->user()->hasPermissionTo('delete-notice', 'admin')){
+            $notice = Notice::find($id);
+            $notice->delete();
+            return redirect()->back()->with('success',__('messages.notice-delete'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 }

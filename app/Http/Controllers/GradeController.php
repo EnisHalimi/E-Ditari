@@ -20,10 +20,10 @@ class GradeController extends Controller
     public function index()
     {
         $grades = Grade::where('school_id','=',Auth::user()->school_id)->paginate(20);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-grade', 'admin'))
             return view('admin.grade.index')->with('grades',$grades);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -31,16 +31,27 @@ class GradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $users = User::where('school_id','=',Auth::user()->school_id)->get();
+        $classroom_id = $request->classroom_id;
+        if($classroom_id != null)
+        {
+            $classrooms = Classroom::where('id','=',$classroom_id)->get();
+            $users = User::where('classroom_id','=',$classroom_id)->get();
+        }
+        else
+        {
+            $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
+            $users = User::where('school_id','=',Auth::user()->school_id)->get();
+
+
+        }
         $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
-        $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-grade', 'admin'))
             return view('admin.grade.create')->with('users',$users)->with('admins',$admins)->with('subjects',$subjects)->with('classrooms',$classrooms);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -51,9 +62,14 @@ class GradeController extends Controller
      */
     public function store(Request $request)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-grade', 'admin')){
         $this->validate($request,[
-            'Nota'=> 'required|numeric',
-            'Periudha'=> 'required|numeric',
+            'Nota'=> 'required|numeric|min:1|max:5',
+            'Periudha'=> 'required|numeric|min:1|max:3',
+            'Nxenesi'=> 'required',
+            'Profesori'=> 'required',
+            'Klasa'=> 'required',
+            'Lenda'=> 'required',
         ]);
         $grade = new Grade;
         $grade->grade = $request->input('Nota');
@@ -64,7 +80,10 @@ class GradeController extends Controller
         $grade->subject_id = $request->input('Lenda');
         $grade->school_id = Auth::guard('admin')->user()->school_id;
         $grade->save();
-        return redirect('/admin/grade')->with('success','U shtua nota');
+        return redirect()->back()->with('success',__('messages.grade-add'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -76,10 +95,10 @@ class GradeController extends Controller
     public function show($id)
     {
         $grade = Grade::find($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-grade', 'admin'))
             return view('admin.grade.show')->with('grade',$grade);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -95,10 +114,10 @@ class GradeController extends Controller
         $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
         $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-grade', 'admin'))
             return view('admin.grade.edit')->with('grade',$grade)->with('users',$users)->with('admins',$admins)->with('subjects',$subjects)->with('classrooms',$classrooms);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -110,9 +129,10 @@ class GradeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-grade', 'admin')){
         $this->validate($request,[
-            'Nota'=> 'required|numeric',
-            'Periudha'=> 'required|numeric',
+            'Nota'=> 'required|numeric|min:1|max:5',
+            'Periudha'=> 'required|numeric|min:1|max:3',
         ]);
         $grade =  Grade::find($id);
         $grade->grade = $request->input('Nota');
@@ -123,7 +143,10 @@ class GradeController extends Controller
         $grade->subject_id = $request->input('Lenda');
         $grade->school_id = Auth::guard('admin')->user()->school_id;
         $grade->save();
-        return redirect('/admin/grade')->with('success','U ndryshua nota');
+        return redirect()->back()->with('success',__('messages.grade-edit'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -134,8 +157,13 @@ class GradeController extends Controller
      */
     public function destroy($id)
     {
-        $grade = Grade::find($id);
-        $grade->delete();
-        return redirect('/admin/grade')->with('success','U fshi nota');
+        if(Auth::guard('admin')->user()->hasPermissionTo('delete-grade', 'admin'))
+        {
+            $grade = Grade::find($id);
+            $grade->delete();
+            return redirect()->back()->with('success',__('messages.grade-delete'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 }

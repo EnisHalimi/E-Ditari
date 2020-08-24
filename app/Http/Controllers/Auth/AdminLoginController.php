@@ -39,9 +39,7 @@ class AdminLoginController extends Controller
         }
 
         if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
-            return redirect()
-                ->intended(route('admin.home'))
-                ->with('status','You are Logged in as Admin!');
+            return redirect(route('admin.home'))->with('success','You are Logged in!');
         }
 
         $this->incrementLoginAttempts($request);
@@ -53,8 +51,8 @@ class AdminLoginController extends Controller
     {
         Auth::guard('admin')->logout();
         return redirect()
-            ->route('admin.login')
-            ->with('status','Admin has been logged out!');
+            ->route('login')
+            ->with('success','Admin has been logged out!');
     }
 
     private function validator(Request $request)

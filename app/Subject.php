@@ -3,9 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class Subject extends Model
 {
+    use SoftDeletes;
+    use LogsActivity;
+
+    protected static $logAttributes = ['name', 'year','school_id'];
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return  "{$eventName}.{$this->school_id}";
+    }
+
     public function school()
     {
         return $this->hasOne('App\School');
@@ -25,4 +38,11 @@ class Subject extends Model
     {
         return $this->hasMany('App\Schedule');
     }
+
+    public static function getName($id)
+    {
+        $subject = Subject::find($id);
+        return $subject->name;
+    }
+
 }

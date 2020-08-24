@@ -15,11 +15,11 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $school = School::find(Auth::user()->school_id);
-        if(Auth::guard('admin'))
-            return view('admin.school.show')->with('school',$school);
+        $schools = School::all();
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-school', 'admin'))
+            return view('admin.school.index')->with('schools',$schools);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -29,7 +29,10 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        return redirect()->back();
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin'))
+            return view('admin.school.create');
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -40,7 +43,25 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        return redirect()->back();
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin')){
+            $this->validate($request,[
+                'Qyteti'=> 'required|string|min:2',
+                'Emri'=> 'required|string|min:2',
+                'Adresa'=> 'required|string|min:2',
+                'Niveli'=> 'required',
+                'Kodi'=> 'required|string|min:2',
+            ]);
+            $school = new School;
+            $school->city = $request->input('Qyteti');
+            $school->name = $request->input('Emri');
+            $school->address = $request->input('Adresa');
+            $school->level = $request->input('Niveli');
+            $school->code = $request->input('Kodi');
+            $school->save();
+            return redirect(route('admin.school.index'))->with('success',__('messages.school-add'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -63,10 +84,10 @@ class SchoolController extends Controller
     public function edit($id)
     {
         $school = School::find($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin'))
             return view('admin.school.edit')->with('school',$school);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -78,19 +99,25 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'Qyteti'=> 'required|string|min:2',
-            'Emri'=> 'required|string|min:2',
-            'Adresa'=> 'required|string|min:2',
-            'Niveli'=> 'required|string|min:2',
-        ]);
-        $school = School::find($id);
-        $school->city = $request->input('Qyteti');
-        $school->name = $request->input('Emri');
-        $school->address = $request->input('Adresa');
-        $school->level = $request->input('Niveli');
-        $school->save();
-        return redirect(route('admin.school.index'))->with('success','U ndryshua shkolla');
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin')){
+            $this->validate($request,[
+                'Qyteti'=> 'required|string|min:2',
+                'Emri'=> 'required|string|min:2',
+                'Adresa'=> 'required|string|min:2',
+                'Niveli'=> 'required|string|min:2',
+                'Kodi'=> 'required|string|min:2',
+            ]);
+            $school = School::find($id);
+            $school->city = $request->input('Qyteti');
+            $school->name = $request->input('Emri');
+            $school->address = $request->input('Adresa');
+            $school->level = $request->input('Niveli');
+            $school->code = $request->input('Kodi');
+            $school->save();
+            return redirect(route('admin.school.index'))->with('success',__('messages.school-edit'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -101,6 +128,13 @@ class SchoolController extends Controller
      */
     public function destroy($id)
     {
-        return redirect()->back();
+        if(Auth::guard('admin')->user()->hasPermissionTo('delete-school', 'admin'))
+        {
+            $school = School::find($id);
+            $school->delete();
+            return redirect(route('admin.school.index'))->with('success',__('messages.school-delete'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 }

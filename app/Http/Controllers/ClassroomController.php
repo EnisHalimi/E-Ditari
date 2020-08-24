@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Classroom;
 use Auth;
 use App\Admin;
+use DataTables;
 
 class ClassroomController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -17,10 +19,10 @@ class ClassroomController extends Controller
     public function index()
     {
         $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->paginate(20);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-classroom', 'admin'))
             return view('admin.classroom.index')->with('classrooms',$classrooms);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -31,10 +33,10 @@ class ClassroomController extends Controller
     public function create()
     {
         $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-classroom', 'admin'))
             return view('admin.classroom.create')->with('admins',$admins);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -45,6 +47,8 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-classroom', 'admin'))
+        {
         $this->validate($request,[
             'Klasa'=> 'required|numeric',
             'Paralelja'=> 'required|numeric',
@@ -55,7 +59,10 @@ class ClassroomController extends Controller
         $classroom->admin_id = $request->input('Kujdestari');
         $classroom->school_id = Auth::guard('admin')->user()->school_id;
         $classroom->save();
-        return redirect('/admin/classroom')->with('success','U shtua klasa');
+        return redirect(route('admin.classroom.index'))->with('success',__('messages.classroom-add'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -67,10 +74,10 @@ class ClassroomController extends Controller
     public function show($id)
     {
         $classroom = Classroom::find($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-classroom', 'admin'))
             return view('admin.classroom.show')->with('classroom',$classroom);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -83,10 +90,10 @@ class ClassroomController extends Controller
     {
         $classroom = Classroom::find($id);
         $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-classroom', 'admin'))
             return view('admin.classroom.edit')->with('classroom',$classroom)->with('admins',$admins);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -98,6 +105,7 @@ class ClassroomController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-classroom', 'admin')){
         $this->validate($request,[
             'Klasa'=> 'required|numeric',
             'Paralelja'=> 'required|numeric',
@@ -108,7 +116,10 @@ class ClassroomController extends Controller
         $classroom->admin_id = $request->input('Kujdestari');
         $classroom->school_id = Auth::guard('admin')->user()->school_id;
         $classroom->save();
-        return redirect('/admin/classroom')->with('success','U ndryshua klasa');
+        return redirect(route('admin.classroom.index'))->with('success',__('messages.classroom-edit'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -119,10 +130,14 @@ class ClassroomController extends Controller
      */
     public function destroy($id)
     {
-        $classroom =  Classroom::find($id);
-        if($classroom->users->count() > 0)
-            return redirect('/admin/classroom')->with('error','Klasa ka ende nxenes nuk mund te shlyhet');
-        $classroom->delete();
-        return redirect('/admin/classroom')->with('success','U fshi klasa');
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-classroom', 'admin')){
+            $classroom =  Classroom::find($id);
+            if($classroom->users->count() > 0)
+                return redirect(route('admin.classroom.index'))->with('error',__('messages.classroom-notempty'));
+            $classroom->delete();
+            return redirect(route('admin.classroom.index'))->with('success',__('messages.classroom-delete'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 }

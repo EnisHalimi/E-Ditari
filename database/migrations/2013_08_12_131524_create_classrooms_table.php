@@ -22,6 +22,7 @@ class CreateClassroomsTable extends Migration
             $table->unsignedBigInteger('admin_id');
             $table->foreign('admin_id')->references('id')->on('admins');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

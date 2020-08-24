@@ -21,10 +21,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::where('school_id','=',Auth::user()->school_id)->where('isParent','=',null)->paginate(20);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-user', 'admin'))
             return view('admin.user.index')->with('users',$users);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.user.index'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -32,13 +32,19 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $classroom_id = $request->classroom_id;
+        if($classroom_id != null)
+        {
+            $classrooms = Classroom::where('id','=',$classroom_id)->get();
+        }
+        else
         $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-user', 'admin'))
             return view('admin.user.create')->with('classrooms',$classrooms);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -49,49 +55,57 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'Emri'=> 'required|min:2|string',
-            'Emri_Prindit'=> 'required|min:2|string',
-            'Mbiemri'=> 'required|min:2|string',
-            'Adresa'=> 'required|min:2|string',
-            'Qyteti'=> 'required|min:2|string',
-            'Vendbanimi'=> 'required|min:2|string',
-            'Nr_Telefonit'=> 'required|min:9|numeric',
-            'Data_e_lindjes'=> 'required|date',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'Foto' =>'image|nullable|max:1999',
-        ]);
-        if($request->hasFile('Foto'))
-        {
-            $fileNamewithExt = $request->file('Foto')->getClientOriginalName();
-            $fileName = pathInfo($fileNamewithExt, PATHINFO_FILENAME);
-            $extension = $request->file('Foto')->getClientOriginalExtension();
-            $fileNametoStore = 'foto-'.Str::random(25);
-            $request->file('Foto')->move(public_path('img'), $fileNametoStore);
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-user', 'admin')){
+            $this->validate($request,[
+                'Emri'=> 'required|min:2|string',
+                'Emri_Prindit'=> 'required|min:2|string',
+                'Mbiemri'=> 'required|min:2|string',
+                'Adresa'=> 'required|min:2|string',
+                'Qyteti'=> 'required|min:2|string',
+                'Vendbanimi'=> 'required|min:2|string',
+                'Nr_Telefonit'=> 'required|min:9|numeric',
+                'Data_e_lindjes'=> 'required|date',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|string|min:6|confirmed',
+                'Foto' =>'image|nullable|max:1999',
+            ]);
+            if($request->hasFile('Foto'))
+            {
+                $fileNamewithExt = $request->file('Foto')->getClientOriginalName();
+                $fileName = pathInfo($fileNamewithExt, PATHINFO_FILENAME);
+                $extension = $request->file('Foto')->getClientOriginalExtension();
+                $fileNametoStore = 'foto-'.Str::random(25).'.'.$extension;
+                $request->file('Foto')->move(public_path('img'), $fileNametoStore);
+            }
+            else
+            {
+                $fileNametoStore = 'no-image';
+            }
+            $user = new User;
+            $user->first_name = $request->input('Emri');
+            $user->fathers_name = $request->input('Emri_Prindit');
+            $user->surname = $request->input('Mbiemri');
+            $user->address = $request->input('Adresa');
+            $user->birthday = $request->input('Data_e_lindjes');
+            $user->city = $request->input('Qyteti');
+            $user->residence = $request->input('Vendbanimi');
+            $user->phone_nr = $request->input('Nr_Telefonit');
+            if($request->input('Statusi') == null)
+                $user->status = "Aktiv";
+            else
+                $user->status = $request->input('Statusi');
+            $user->gender = $request->input('Gjinia');
+            $user->photo = $fileNametoStore;
+            $user->isParent = null;
+            $user->classroom_id =  $request->input('Klasa');
+            $user->school_id = Auth::guard('admin')->user()->school_id;
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+            return redirect(route('admin.classroom.index'))->with('success',__('messages.user-add'));
         }
         else
-        {
-            $fileNametoStore = 'no-image';
-        }
-        $user = new User;
-        $user->first_name = $request->input('Emri');
-        $user->fathers_name = $request->input('Emri_Prindit');
-        $user->surname = $request->input('Mbiemri');
-        $user->address = $request->input('Adresa');
-        $user->birthday = $request->input('Data_e_lindjes');
-        $user->city = $request->input('Qyteti');
-        $user->residence = $request->input('Vendbanimi');
-        $user->phone_nr = $request->input('Nr_Telefonit');
-        $user->status = "Aktiv";
-        $user->photo = $fileNametoStore;
-        $user->isParent = null;
-        $user->classroom_id =  $request->input('Klasa');
-        $user->school_id = Auth::guard('admin')->user()->school_id;
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-        return redirect('/admin/user')->with('success','U shtua useri');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -103,10 +117,10 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-user', 'admin'))
             return view('admin.user.show')->with('user',$user);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -119,10 +133,10 @@ class UserController extends Controller
     {
         $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
         $user = User::findOrFail($id);
-        if(Auth::guard('admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-user', 'admin'))
             return view('admin.user.edit')->with('classrooms',$classrooms)->with('user',$user);
         else
-            return redirect('/home')->with('error','No access');
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 
     /**
@@ -134,41 +148,54 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'Emri'=> 'required|min:2|string',
-            'Emri_Prindit'=> 'required|min:2|string',
-            'Mbiemri'=> 'required|min:2|string',
-            'Adresa'=> 'required|min:2|string',
-            'Qyteti'=> 'required|min:2|string',
-            'Vendbanimi'=> 'required|min:2|string',
-            'Nr_Telefonit'=> 'required|min:9|numeric',
-            'Data_e_lindjes'=> 'required|date',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'Foto' =>'image|nullable|max:1999',
-        ]);
-        $user = User::find($id);
-        if($request->hasFile('Foto'))
-        {
-            $fileNamewithExt = $request->file('Foto')->getClientOriginalName();
-            $fileName = pathInfo($fileNamewithExt, PATHINFO_FILENAME);
-            $extension = $request->file('Foto')->getClientOriginalExtension();
-            $fileNametoStore = 'foto-'.Str::random(25);
-            $request->file('Foto')->move(public_path('img'), $fileNametoStore);
-            $user->photo = $fileNametoStore;
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-user', 'admin')){
+            $this->validate($request,[
+                'Emri'=> 'required|min:2|string',
+                'Emri_Prindit'=> 'required|min:2|string',
+                'Mbiemri'=> 'required|min:2|string',
+                'Adresa'=> 'required|min:2|string',
+                'Qyteti'=> 'required|min:2|string',
+                'Vendbanimi'=> 'required|min:2|string',
+                'Nr_Telefonit'=> 'required|min:9|numeric',
+                'Data_e_lindjes'=> 'required|date',
+                'email' => 'required|email|unique:users,email,'.$id,
+                'Foto' =>'image|nullable|max:1999',
+                'password' => 'confirmed',
+            ]);
+            $user = User::find($id);
+            if($request->hasFile('Foto'))
+            {
+                $fileNamewithExt = $request->file('Foto')->getClientOriginalName();
+                $fileName = pathInfo($fileNamewithExt, PATHINFO_FILENAME);
+                $extension = $request->file('Foto')->getClientOriginalExtension();
+                $fileNametoStore = 'foto-'.Str::random(25).'.'.$extension;
+                $request->file('Foto')->move(public_path('img'), $fileNametoStore);
+                $user->photo = $fileNametoStore;
+            }
+             if($request->input('Statusi') != null)
+                $user->status = $request->input('Statusi');
+            $user->status = $request->input('Statusi');
+            $user->first_name = $request->input('Emri');
+            $user->fathers_name = $request->input('Emri_Prindit');
+            $user->surname = $request->input('Mbiemri');
+            $user->address = $request->input('Adresa');
+            $user->birthday = $request->input('Data_e_lindjes');
+            $user->city = $request->input('Qyteti');
+            $user->residence = $request->input('Vendbanimi');
+            $user->phone_nr = $request->input('Nr_Telefonit');
+            $user->gender = $request->input('Gjinia');
+            $user->classroom_id =  $request->input('Klasa');
+            $user->school_id = Auth::guard('admin')->user()->school_id;
+            $user->email = $request->input('email');
+            if($request->input('password') > 0)
+            {
+                $user->password = Hash::make($request->input('password'));
+            }
+            $user->save();
+            return redirect(route('admin.classroom.index'))->with('success',__('messages.user-edit'));
         }
-        $user->first_name = $request->input('Emri');
-        $user->fathers_name = $request->input('Emri_Prindit');
-        $user->surname = $request->input('Mbiemri');
-        $user->address = $request->input('Adresa');
-        $user->birthday = $request->input('Data_e_lindjes');
-        $user->city = $request->input('Qyteti');
-        $user->residence = $request->input('Vendbanimi');
-        $user->phone_nr = $request->input('Nr_Telefonit');
-        $user->classroom_id =  $request->input('Klasa');
-        $user->school_id = Auth::guard('admin')->user()->school_id;
-        $user->email = $request->input('email');
-        $user->save();
-        return redirect('/admin/user')->with('success','U ndryshua useri');
+        else
+            return redirect(route('admin.home'))->with('errors',__('messages.noauthorization'));
     }
 
     /**
@@ -179,10 +206,14 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $user->grades()->delete();
-        $user->notices()->delete();
-        $user->delete();
-        return redirect('/admin/user')->with('success','U fshi useri');
+        if(Auth::guard('admin')->user()->hasPermissionTo('delete-user', 'admin')){
+            $user = User::find($id);
+            $user->grades()->delete();
+            $user->notices()->delete();
+            $user->delete();
+            return redirect(route('admin.classroom.index'))->with('success',__('messages.user-delete'));
+        }
+        else
+            return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
 }

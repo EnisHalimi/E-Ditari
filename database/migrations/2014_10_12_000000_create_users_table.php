@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('residence');
             $table->string('phone_nr');
             $table->string('photo');
-            $table->string('status');
+            $table->string('status')->default('Aktiv');
             $table->unsignedBigInteger('isParent')->nullable();
             $table->unsignedBigInteger('school_id');
             $table->foreign('school_id')->references('id')->on('schools');
@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
 
 
         });

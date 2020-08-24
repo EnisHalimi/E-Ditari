@@ -4,9 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Classroom extends Model
 {
+    use SoftDeletes;
+    use LogsActivity;
+
+    protected static $logAttributes = ['year', 'parallel','school_id','admin_id'];
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return  "{$eventName}.{$this->school_id}";
+    }
+
     public function users()
     {
         return $this->hasMany('App\User');
@@ -30,5 +42,11 @@ class Classroom extends Model
     public function getClassNameAttribute()
     {
         return $this->year.'/'.$this->parallel;
+    }
+
+    public static function getName($id)
+    {
+        $classroom = Classroom::find($id);
+        return $classroom->year.'/'.$classroom->parallel;
     }
 }

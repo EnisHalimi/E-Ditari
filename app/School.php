@@ -4,9 +4,22 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class School extends Model
 {
+    use SoftDeletes;
+    use LogsActivity;
+
+    protected static $logAttributes = ['name', 'city','address','level'];
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return  "{$eventName}.{$this->id}";
+    }
+
     public function users()
     {
         return $this->hasMany('App\User');
@@ -24,7 +37,12 @@ class School extends Model
 
     public function getPrincipalAttribute()
     {
-        $admin = Admin::find($this->principal_id);
-        return $admin->full_name;
+        $admins = Admin::where('school_id','=',$this->id)->get();
+        foreach($admins as $admin)
+        {
+            if($admin->hasRole('Drejtor'))
+                return $admin->full_name;
+        }
+        return "Nuk ka drejtor";
     }
 }

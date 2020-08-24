@@ -43,13 +43,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item mr-3">
-                <a class="nav-link @yield('profile')" href="{{route('home')}}">Profile</a>
+                <a class="nav-link @yield('profile')" href="{{route('home')}}">Profili</a>
               </li>
               <li class="nav-item mr-3">
-                <a class="nav-link @yield('moodle')" href="{{route('moodle')}}">Moodle</a>
+                <a class="nav-link @yield('moodle')" href="{{route('moodle')}}">Ditari</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link @yield('calendar')" href="{{route('calendar')}}">Calendar</a>
+                <a class="nav-link @yield('calendar')" href="{{route('calendar')}}">Kalendari</a>
               </li>
             </ul>
             <ul class="navbar-nav mr-5">

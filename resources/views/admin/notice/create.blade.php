@@ -21,9 +21,9 @@
                 <span class="help-block">
                     <strong class="text-danger"><small>{{ $errors->first('Nxenesi') }}</small></strong>
                 </span>
-            @endif
+                @endif
                  <label class="pt-2 mb-0"  for="schedule">Orari</label>
-                <select class=" @error('Orari') is-invalid @enderror" id="schedule" name="Orari" placeholder="Orari">
+                    <select class=" @error('Orari') is-invalid @enderror" id="schedule" name="Orari" placeholder="Orari">
                     @foreach($schedules as $schedule)
                         <option value="{{$schedule->id}}">{{$schedule->full_name}}</option>
                     @endforeach
@@ -33,8 +33,19 @@
                         <strong class="text-danger"><small>{{ $errors->first('Orari') }}</small></strong>
                     </span>
                 @endif
+
+                <label class="pt-2 mb-0">Arsyeshme</label>
+                <div>
+                    <input type="checkbox"  name="Arsyeshme" value="true" class="@error('Arsyeshme') is-invalid @enderror " id="notice1">
+                    <label class="pt-2 mb-0" for="notice1">Arsyeshme</label>
+                        @if ($errors->has('Arsyeshme'))
+                            <span class="help-block">
+                                <strong class="text-danger"><small>{{ $errors->first('Arsyeshme') }}</small></strong>
+                            </span>
+                        @endif
+                    </div>
                   <label class="mb-0">Përshkrimi</label>
-                  <textarea class="@error('Pershkrimi') is-invalid @enderror" id="description" name="Pershkrimi" placeholder="Përshkrimi"  required autofocus rows="3"></textarea>
+                  <textarea class="@error('Pershkrimi') is-invalid @enderror" id="description" name="Pershkrimi" placeholder="Përshkrimi"  autofocus rows="3"></textarea>
                   @if ($errors->has('Pershkrimi'))
                       <span class="help-block">
                           <strong class="text-danger"><small>{{ $errors->first('Pershkrimi') }}</small></strong>

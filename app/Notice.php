@@ -27,4 +27,13 @@ class Notice extends Model
     {
         return $this->belongsTo('App\Schedule');
     }
+
+    public static function getNoticesCount($user,$arsyeshme)
+    {
+        $notices = Notice::where([
+            ['arsyeshme','=',$arsyeshme],
+            ['user_id','=',$user]
+            ])->get();
+        return $notices->count();
+    }
 }

@@ -58,6 +58,11 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->fathers_name} {$this->surname}";
     }
 
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->surname}";
+    }
+
     public static function getFullName($id)
     {
         $user = User::find($id);

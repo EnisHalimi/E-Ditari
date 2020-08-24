@@ -15,7 +15,8 @@ class CreateNoticesTable extends Migration
     {
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->boolean('arsyeshme')->nullable();
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')->references('id')->on('schedules');
             $table->unsignedBigInteger('user_id');

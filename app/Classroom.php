@@ -44,6 +44,13 @@ class Classroom extends Model
         return $this->year.'/'.$this->parallel;
     }
 
+
+    public function getSubjectsAttribute()
+    {
+        $subjects = $this->schedules()->select('subject_id', 'admin_id')->distinct()->get();
+        return $subjects;
+    }
+
     public static function getName($id)
     {
         $classroom = Classroom::find($id);

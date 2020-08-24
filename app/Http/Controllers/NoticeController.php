@@ -99,6 +99,7 @@ class NoticeController extends Controller
         $notice = new Notice;
         $notice->description = $request->input('Pershkrimi');
         $notice->user_id = $request->input('Nxenesi');
+        $notice->arsyeshme = $request->input('Arsyeshme');
         $notice->schedule_id = $request->input('Orari');
         $notice->school_id = Auth::user()->school_id;
         $notice->save();
@@ -151,13 +152,13 @@ class NoticeController extends Controller
     {
         if(Auth::guard('admin')->user()->hasPermissionTo('edit-notice', 'admin')){
         $this->validate($request,[
-            'Pershkrimi'=> 'required',
             'Nxenesi'=> 'required',
             'Orari'=> 'required',
         ]);
         $notice =  Notice::find($id);
         $notice->description = $request->input('Pershkrimi');
         $notice->user_id = $request->input('Nxenesi');
+        $notice->arsyeshme = $request->input('Arsyeshme');
         $notice->schedule_id = $request->input('Orari');
         $notice->school_id = Auth::user()->school_id;
         $notice->save();

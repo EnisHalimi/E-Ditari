@@ -43,4 +43,63 @@ class Grade extends Model
     {
         return $this->belongsTo('App\School');
     }
+
+    public static function getGrades($subject, $period, $user,$admin)
+    {
+        $grade = Grade::where([
+            ['subject_id','=',$subject],
+            ['period','=',$period],
+            ['admin_id','=',$admin],
+            ['user_id','=',$user]
+            ])->get();
+        return $grade;
+    }
+
+    public static function getGradeCount($subject, $period,$user,$admin)
+    {
+        $grade = Grade::where([
+            ['subject_id','=',$subject],
+            ['period','=',$period],
+            ['admin_id','=',$admin],
+            ['user_id','=',$user]
+            ])->get();
+        return $grade->count();
+    }
+
+    public static function getFinalGrade($subject,$user,$admin)
+    {
+        $grades = Grade::where([
+            ['subject_id','=',$subject],
+            ['admin_id','=',$admin],
+            ['user_id','=',$user]
+            ])->get();
+        $total = 0;
+        $average = 0;
+        foreach($grades as $grade)
+        {
+            $total = $total + $grade->grade;
+        }
+        if($grades->count() != 0)
+            $average = $total/$grades->count();
+        return number_format($average,2);
+    }
+
+    public static function getPeriodAverage($subject,$period,$user,$admin)
+    {
+        $grades = Grade::where([
+            ['period','=',$period],
+            ['subject_id','=',$subject],
+            ['admin_id','=',$admin],
+            ['user_id','=',$user]
+            ])->get();
+        $total = 0;
+        $average = 0;
+        foreach($grades as $grade)
+        {
+            $total = $total + $grade->grade;
+        }
+        if($grades->count() != 0)
+            $average = $total/$grades->count();
+        return number_format($average,2);
+    }
 }

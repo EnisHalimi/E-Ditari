@@ -38,5 +38,7 @@ Route::prefix('/admin')->name('admin.')->middleware('auth:admin')->group(functio
     Route::resource('role', 'RoleController');
     Route::post('/markAsRead', 'HomeController@markAsRead');
     Route::get('/getSchedules', 'ScheduleController@getSchedules');
+    Route::get('/getUserCount', 'UserController@getUserCount');
+    Route::get('/getGenderCount', 'UserController@getGenderCount');
 });
 

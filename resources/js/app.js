@@ -8,6 +8,7 @@ require('./components/login');
 require('./components/calendar');
 require('./components/schedule');
 require('./components/data-tables');
+require('./components/chart-index');
 
 $.ajaxSetup({
     headers: {

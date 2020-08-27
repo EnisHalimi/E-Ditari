@@ -35,6 +35,12 @@ class School extends Model
         return $this->hasMany('App\Admin');
     }
 
+    public static function countSchools()
+    {
+        $schools = School::all();
+        return $schools->count();
+    }
+
     public function getPrincipalAttribute()
     {
         $admins = Admin::where('school_id','=',$this->id)->get();

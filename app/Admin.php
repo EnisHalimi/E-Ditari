@@ -75,6 +75,12 @@ class Admin extends Authenticatable
         return "{$this->first_name} {$this->surname}";
     }
 
+    public static function countAdmins()
+    {
+        $admins = Admin::all();
+        return $admins->count();
+    }
+
     public static function getFullName($id)
     {
         $admin = Admin::find($id);

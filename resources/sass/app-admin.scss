@@ -19,3 +19,15 @@
 @import "startbootstrap/error.scss";
 @import "startbootstrap/footer.scss";
 @import "startbootstrap/datatables.css";
+
+.welcome-section,
+.welcome-section a {
+    text-align: center;
+    color: #eee;
+    font-size: 45px;
+}
+
+
+.welcome-right img {
+    width: 85%;
+}

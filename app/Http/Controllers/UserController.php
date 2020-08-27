@@ -9,10 +9,39 @@ use Illuminate\Support\Str;
 use Auth;
 use App\User;
 use App\Classroom;
+use Carbon\Carbon;
+use Redirect,Response;
 
 
 class UserController extends Controller
 {
+
+    public function getUserCount()
+    {
+        $january = User::whereBetween('created_at', [Carbon::now()->year.'-01-01', Carbon::now()->year.'-01-31'])->where('isParent','=',null)->get()->count();
+        $february = User::whereBetween('created_at', [Carbon::now()->year.'-02-01', Carbon::now()->year.'-02-28'])->where('isParent','=',null)->get()->count();
+        $march = User::whereBetween('created_at', [Carbon::now()->year.'-03-01', Carbon::now()->year.'-03-31'])->where('isParent','=',null)->get()->count();
+        $april = User::whereBetween('created_at', [Carbon::now()->year.'-04-01', Carbon::now()->year.'-04-30'])->where('isParent','=',null)->get()->count();
+        $may = User::whereBetween('created_at', [Carbon::now()->year.'-05-01', Carbon::now()->year.'-05-31'])->where('isParent','=',null)->get()->count();
+        $june = User::whereBetween('created_at', [Carbon::now()->year.'-06-01', Carbon::now()->year.'-06-30'])->where('isParent','=',null)->get()->count();
+        $july = User::whereBetween('created_at', [Carbon::now()->year.'-07-01', Carbon::now()->year.'-07-31'])->where('isParent','=',null)->get()->count();
+        $august = User::whereBetween('created_at', [Carbon::now()->year.'-08-01', Carbon::now()->year.'-08-31'])->where('isParent','=',null)->get()->count();
+        $september = User::whereBetween('created_at', [Carbon::now()->year.'-09-01', Carbon::now()->year.'-09-30'])->where('isParent','=',null)->get()->count();
+        $october = User::whereBetween('created_at', [Carbon::now()->year.'-10-01', Carbon::now()->year.'-10-31'])->where('isParent','=',null)->get()->count();
+        $november = User::whereBetween('created_at', [Carbon::now()->year.'-11-01', Carbon::now()->year.'-11-30'])->where('isParent','=',null)->get()->count();
+        $december = User::whereBetween('created_at', [Carbon::now()->year.'-12-01', Carbon::now()->year.'-12-31'])->where('isParent','=',null)->get()->count();
+        $data = array($january,$february,$march,$april,$may,$june,$july,$august,$september,$october,$november,$december);
+        return $data;
+    }
+
+    public function getGenderCount()
+    {
+        $male = User::where([['gender','=',"M"],['isParent','=',null]])->get()->count();
+        $female = User::where([['gender','=',"F"],['isParent','=',null]])->get()->count();
+        $data = array($male,$female);
+        return $data;
+    }
+
     /**
      * Display a listing of the resource.
      *

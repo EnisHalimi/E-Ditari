@@ -110,6 +110,31 @@ class User extends Authenticatable
         return number_format($average,2);
     }
 
+    public static function countUsers()
+    {
+        $users = User::where('isParent','=',null);
+        return $users->count();
+    }
+
+    public static function countFemaleUsers()
+    {
+        $users = User::where([['isParent','=',null],['gender','=','F']]);
+        return $users->count();
+    }
+
+    public static function countMaleUsers()
+    {
+        $users = User::where([['isParent','=',null],['gender','=','M']]);
+        return $users->count();
+    }
+
+    public static function countParents()
+    {
+        $users = User::where('isParent','!=',null);
+        return $users->count();
+    }
+
+
     public function getSecondPeriodAverageAttribute()
     {
         $grades = $this->grades()->where('period','=',2)->get();

@@ -40,5 +40,6 @@ Route::prefix('/admin')->name('admin.')->middleware('auth:admin')->group(functio
     Route::get('/getSchedules', 'ScheduleController@getSchedules');
     Route::get('/getUserCount', 'UserController@getUserCount');
     Route::get('/getGenderCount', 'UserController@getGenderCount');
+    Route::get('/getClassroomReport', 'ClassroomController@getClassroomReport')->name('classroom.report');
 });
 

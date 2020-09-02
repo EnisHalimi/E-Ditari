@@ -7,9 +7,18 @@ use App\Classroom;
 use Auth;
 use App\Admin;
 use DataTables;
+use PDF;
 
 class ClassroomController extends Controller
 {
+
+    public function getClassroomReport()
+    {
+        $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
+        $data['classrooms'] = $classrooms;
+        $pdf = PDF::loadView('admin.classroom.report', $data)->setPaper('a3', 'landscape');
+        return $pdf->stream('Raporti-klasave.pdf');
+       }
 
     /**
      * Display a listing of the resource.

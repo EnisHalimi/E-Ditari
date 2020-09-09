@@ -18,26 +18,26 @@ class UserController extends Controller
 
     public function getUserCount()
     {
-        $january = User::whereBetween('created_at', [Carbon::now()->year.'-01-01', Carbon::now()->year.'-01-31'])->where('isParent','=',null)->get()->count();
-        $february = User::whereBetween('created_at', [Carbon::now()->year.'-02-01', Carbon::now()->year.'-02-28'])->where('isParent','=',null)->get()->count();
-        $march = User::whereBetween('created_at', [Carbon::now()->year.'-03-01', Carbon::now()->year.'-03-31'])->where('isParent','=',null)->get()->count();
-        $april = User::whereBetween('created_at', [Carbon::now()->year.'-04-01', Carbon::now()->year.'-04-30'])->where('isParent','=',null)->get()->count();
-        $may = User::whereBetween('created_at', [Carbon::now()->year.'-05-01', Carbon::now()->year.'-05-31'])->where('isParent','=',null)->get()->count();
-        $june = User::whereBetween('created_at', [Carbon::now()->year.'-06-01', Carbon::now()->year.'-06-30'])->where('isParent','=',null)->get()->count();
-        $july = User::whereBetween('created_at', [Carbon::now()->year.'-07-01', Carbon::now()->year.'-07-31'])->where('isParent','=',null)->get()->count();
-        $august = User::whereBetween('created_at', [Carbon::now()->year.'-08-01', Carbon::now()->year.'-08-31'])->where('isParent','=',null)->get()->count();
-        $september = User::whereBetween('created_at', [Carbon::now()->year.'-09-01', Carbon::now()->year.'-09-30'])->where('isParent','=',null)->get()->count();
-        $october = User::whereBetween('created_at', [Carbon::now()->year.'-10-01', Carbon::now()->year.'-10-31'])->where('isParent','=',null)->get()->count();
-        $november = User::whereBetween('created_at', [Carbon::now()->year.'-11-01', Carbon::now()->year.'-11-30'])->where('isParent','=',null)->get()->count();
-        $december = User::whereBetween('created_at', [Carbon::now()->year.'-12-01', Carbon::now()->year.'-12-31'])->where('isParent','=',null)->get()->count();
+        $january = User::whereBetween('created_at', [Carbon::now()->year.'-01-01', Carbon::now()->year.'-01-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $february = User::whereBetween('created_at', [Carbon::now()->year.'-02-01', Carbon::now()->year.'-02-28'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $march = User::whereBetween('created_at', [Carbon::now()->year.'-03-01', Carbon::now()->year.'-03-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $april = User::whereBetween('created_at', [Carbon::now()->year.'-04-01', Carbon::now()->year.'-04-30'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $may = User::whereBetween('created_at', [Carbon::now()->year.'-05-01', Carbon::now()->year.'-05-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $june = User::whereBetween('created_at', [Carbon::now()->year.'-06-01', Carbon::now()->year.'-06-30'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $july = User::whereBetween('created_at', [Carbon::now()->year.'-07-01', Carbon::now()->year.'-07-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $august = User::whereBetween('created_at', [Carbon::now()->year.'-08-01', Carbon::now()->year.'-08-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $september = User::whereBetween('created_at', [Carbon::now()->year.'-09-01', Carbon::now()->year.'-09-30'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $october = User::whereBetween('created_at', [Carbon::now()->year.'-10-01', Carbon::now()->year.'-10-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $november = User::whereBetween('created_at', [Carbon::now()->year.'-11-01', Carbon::now()->year.'-11-30'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $december = User::whereBetween('created_at', [Carbon::now()->year.'-12-01', Carbon::now()->year.'-12-31'])->where([['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
         $data = array($january,$february,$march,$april,$may,$june,$july,$august,$september,$october,$november,$december);
         return $data;
     }
 
     public function getGenderCount()
     {
-        $male = User::where([['gender','=',"M"],['isParent','=',null]])->get()->count();
-        $female = User::where([['gender','=',"F"],['isParent','=',null]])->get()->count();
+        $male = User::where([['gender','=',"M"],['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
+        $female = User::where([['gender','=',"F"],['isParent','=',null],['school_id','=', Auth::user()->school_id]])->get()->count();
         $data = array($male,$female);
         return $data;
     }
@@ -69,9 +69,16 @@ class UserController extends Controller
             $classrooms = Classroom::where('id','=',$classroom_id)->get();
         }
         else
-        $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
+            $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
+        $student_id = $request->user_id;
+        if($student_id != null)
+        {
+            $user = User::where('id','=',$student_id)->first();
+        }
+        else
+            $user = null;
         if(Auth::guard('admin')->user()->hasPermissionTo('create-user', 'admin'))
-            return view('admin.user.create')->with('classrooms',$classrooms);
+            return view('admin.user.create')->with('classrooms',$classrooms)->with('user',$user);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
@@ -125,7 +132,10 @@ class UserController extends Controller
                 $user->status = $request->input('Statusi');
             $user->gender = $request->input('Gjinia');
             $user->photo = $fileNametoStore;
-            $user->isParent = null;
+            if($request->input('parent') == null)
+                $user->isParent = null;
+            else
+                $user->isParent = $request->input('parent');
             $user->classroom_id =  $request->input('Klasa');
             $user->school_id = Auth::guard('admin')->user()->school_id;
             $user->email = $request->input('email');
@@ -203,7 +213,6 @@ class UserController extends Controller
             }
              if($request->input('Statusi') != null)
                 $user->status = $request->input('Statusi');
-            $user->status = $request->input('Statusi');
             $user->first_name = $request->input('Emri');
             $user->fathers_name = $request->input('Emri_Prindit');
             $user->surname = $request->input('Mbiemri');

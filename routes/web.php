@@ -22,6 +22,7 @@ Route::middleware('auth')->group( function () {
     Route::get('/moodle', 'HomeController@moodle')->name('moodle');
     Route::get('/calendar', 'HomeController@calendar')->name('calendar');
     Route::get('/getNotices', 'NoticeController@getNotices');
+    Route::post('/markAsRead', 'HomeController@markAsRead');
 });
 
 Route::prefix('/admin')->name('admin.')->middleware('auth:admin')->group(function(){
@@ -38,6 +39,7 @@ Route::prefix('/admin')->name('admin.')->middleware('auth:admin')->group(functio
     Route::resource('role', 'RoleController');
     Route::post('/markAsRead', 'HomeController@markAsRead');
     Route::get('/getSchedules', 'ScheduleController@getSchedules');
+    Route::post('/dayOff', 'ScheduleController@dayOff')->name('day-off');
     Route::get('/getUserCount', 'UserController@getUserCount');
     Route::get('/getGenderCount', 'UserController@getGenderCount');
     Route::get('/getClassroomReport', 'ClassroomController@getClassroomReport')->name('classroom.report');

@@ -34,6 +34,25 @@
                   <strong class="text-danger"><small>{{ $errors->first('Orari') }}</small></strong>
               </span>
           @endif
+          <label class="pt-2 mb-0">Arsyeshme</label>
+          <div>
+              <input type="checkbox"  name="Arsyeshme" value="2" @if($notice->arsyeshme == 2) checked @endif onclick="document.getElementById('notice2').checked = false;"  class="@error('Arsyeshme') is-invalid @enderror " id="notice1">
+              <label class="pt-2 mb-0" for="notice1">Arsyeshme</label>
+                  @if ($errors->has('Arsyeshme'))
+                      <span class="help-block">
+                          <strong class="text-danger"><small>{{ $errors->first('Arsyeshme') }}</small></strong>
+                      </span>
+                  @endif
+              </div>
+          <div>
+              <input type="checkbox"  name="Arsyeshme"  @if($notice->arsyeshme == 1) checked @endif onclick="document.getElementById('notice1').checked = false;" value="1" class="@error('Arsyeshme') is-invalid @enderror " id="notice2">
+              <label class="pt-2 mb-0" for="notice2">Pa Arsyeshme</label>
+                  @if ($errors->has('Arsyeshme'))
+                      <span class="help-block">
+                          <strong class="text-danger"><small>{{ $errors->first('Arsyeshme') }}</small></strong>
+                      </span>
+                  @endif
+              </div>
             <label class="mb-0">Përshkrimi</label>
             <textarea class="@error('Pershkrimi') is-invalid @enderror" id="description" name="Pershkrimi" placeholder="Përshkrimi"  required autofocus rows="3">{{$notice->description}}</textarea>
             @if ($errors->has('Pershkrimi'))

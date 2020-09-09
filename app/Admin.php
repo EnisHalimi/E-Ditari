@@ -9,7 +9,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use DB;
-
+use Auth;
 
 
 class Admin extends Authenticatable
@@ -77,7 +77,7 @@ class Admin extends Authenticatable
 
     public static function countAdmins()
     {
-        $admins = Admin::all();
+        $admins = Admin::where('school_id','=', Auth::user()->school_id)->get();
         return $admins->count();
     }
 

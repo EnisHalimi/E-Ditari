@@ -129,7 +129,7 @@
                       </tr>
                     </tfoot>
                     <tbody>
-                        @foreach($classroom->users as $user)
+                        @foreach($classroom->students as $user)
                       <tr>
                         <td>{{$user->full_name}}</td>
                         <td>{{$user->first_period_average}}
@@ -265,10 +265,11 @@
                                     <div class="modal-body">
                                         <table id="dataTable" class="table">
                                             <tbody>
-                                                @foreach($user->notices as $notice)
+                                                @foreach($user->absences as $notice)
                                                 <tr>
                                                     <th scope="col">{{$notice->schedule->subject->name}}</th>
                                                     <th>{{$notice->schedule->date}}</th>
+                                                    <th>@if($notice->arsyeshme ==2) Arsyeshme @else Pa Arsyeshme @endif</th>
                                                     <th><a class="btn btn-primary btn-circle" href="{{route('admin.notice.edit',$notice->id)}}"><i class="far fa-edit"></i></a>
                                                         <form class="d-inline" id="delete{{$notice->id}}" method="POST" action="{{ route('admin.notice.destroy',$notice->id)}}" accept-charset="UTF-8">
                                                             {{ csrf_field() }}
@@ -293,6 +294,44 @@
                                     <input name="_method" type="hidden" value="DELETE">
                                 </form>
                                 <button type="submit" form="delete{{$user->id}}" class="btn btn-danger btn-circle" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
+                                <a href="#" class="btn btn-secondary btn-circle" data-toggle="modal" data-target="#parent{{$user->id}}">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                <div class="modal fade" id="parent{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="parentLabel{{$user->id}}" aria-hidden="true">
+                                    <div class="modal-dialog " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="parentLabel{{$user->id}}">Prinderit </h5>
+                                        <a class="ml-3 btn btn-primary btn-circle" href="{{route('admin.user.create',['user_id' => $user->id])}}"><i class="fa fa-plus"></i></a>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="dataTable" class="table">
+                                                <tbody>
+                                                    @foreach($user->parents as $parent)
+                                                    <tr>
+                                                        <th scope="col">{{$parent->full_name}}</th>
+                                                        <th>{{$parent->phone_nr}}</th>
+                                                        <th><a class="btn btn-primary btn-circle" href="{{route('admin.user.edit',$parent->id)}}"><i class="far fa-edit"></i></a>
+                                                            <form class="d-inline" id="delete{{$parent->id}}" method="POST" action="{{ route('admin.user.destroy',$parent->id)}}" accept-charset="UTF-8">
+                                                                {{ csrf_field() }}
+                                                                <input name="_method" type="hidden" value="DELETE">
+                                                            </form>
+                                                            <button type="submit" form="delete{{$parent->id}}" class="btn btn-danger btn-circle" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
+                                                        </th>
+                                                    </tr>
+                                                  @endforeach
+                                                </tbody>
+                                              </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
 
                               </td>
                       </tr>

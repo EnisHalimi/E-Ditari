@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Auth;
+use DB;
 
 class User extends Authenticatable
 {
@@ -69,6 +71,22 @@ class User extends Authenticatable
         return $user->full_name;
     }
 
+    public function getNotificationsAttribute()
+    {
+        $notifications = DB::table('notifications')->where([['user_id', '=', $this->id],
+        ['opened', '=', false],])->get();
+        if($notifications->count() == 0)
+                return 0;
+        return $notifications;
+    }
+
+    public function getNotificationsCountAttribute()
+    {
+        $notifications = DB::table('notifications')->where([['user_id', '=', $this->id],
+        ['opened', '=', false],])->get();
+        return $notifications->count();
+    }
+
     public function getItsParentAttribute()
     {
         if($this->isParent == null)
@@ -80,6 +98,12 @@ class User extends Authenticatable
     public function getBirthdayDateAttribute()
     {
         return date('d/m/Y', strtotime($this->birthday));
+    }
+
+    public function getParentsAttribute()
+    {
+        $parents = User::where('isParent','=',$this->id)->get();
+        return $parents;
     }
 
     public function getAverageGradeAttribute()
@@ -112,25 +136,25 @@ class User extends Authenticatable
 
     public static function countUsers()
     {
-        $users = User::where('isParent','=',null);
+        $users = User::where([['isParent','=',null],['school_id','=', Auth::user()->school_id]]);
         return $users->count();
     }
 
     public static function countFemaleUsers()
     {
-        $users = User::where([['isParent','=',null],['gender','=','F']]);
+        $users = User::where([['isParent','=',null],['gender','=','F'],['school_id','=', Auth::user()->school_id]]);
         return $users->count();
     }
 
     public static function countMaleUsers()
     {
-        $users = User::where([['isParent','=',null],['gender','=','M']]);
+        $users = User::where([['isParent','=',null],['gender','=','M'],['school_id','=', Auth::user()->school_id]]);
         return $users->count();
     }
 
     public static function countParents()
     {
-        $users = User::where('isParent','!=',null);
+        $users = User::where([['isParent','!=',null],['school_id','=', Auth::user()->school_id]]);
         return $users->count();
     }
 
@@ -165,7 +189,13 @@ class User extends Authenticatable
 
     public function getAllAbsencesAttribute()
     {
-        $absences = $this->notices()->where('description','=','Munges')->count();
+        $absences = $this->notices()->where('arsyeshme','!=',0)->count();
+        return $absences;
+    }
+
+    public function getAbsencesAttribute()
+    {
+        $absences = $this->notices()->where('arsyeshme','!=',0)->get();
         return $absences;
     }
 

@@ -37,7 +37,8 @@ class GradeController extends Controller
         if($classroom_id != null)
         {
             $classrooms = Classroom::where('id','=',$classroom_id)->get();
-            $users = User::where('classroom_id','=',$classroom_id)->get();
+            $classroom = Classroom::find($classroom_id);
+            $users = $classroom->students;
         }
         else
         {

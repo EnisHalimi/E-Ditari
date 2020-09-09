@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
             <div class="card ml-auto mr-auto p-4 border-left-danger">
-            <h3>Ndrysho nxenesin {{$user->full_name}}</h3>
+            <h3>Ndrysho @if($user->itsParent) prindin @else nxenesin  @endif {{$user->full_name}}</h3>
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-12 text-center">
                     <label class="pt-2 mb-0">Emri</label><br />

@@ -50,6 +50,12 @@ class Classroom extends Model
         $subjects = $this->schedules()->select('subject_id', 'admin_id')->distinct()->get();
         return $subjects;
     }
+	
+	  public function getStudentsAttribute()
+    {
+        $users = $this->users()->where('isParent','=',null)->get();
+        return $users;
+    }
 
     public static function getName($id)
     {

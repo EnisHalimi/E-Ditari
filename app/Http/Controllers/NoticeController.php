@@ -7,6 +7,7 @@ use App\Notice;
 use App\User;
 use App\Schedule;
 use Auth;
+use App\Classroom;
 use Redirect,Response;
 
 use function Symfony\Component\VarDumper\Dumper\esc;
@@ -69,7 +70,8 @@ class NoticeController extends Controller
                 ['school_id','=',Auth::user()->school_id],
                 ['classroom_id','=',$classroom_id],
             ])->get();
-            $users = User::where('classroom_id','=',$classroom_id)->get();
+            $classroom = Classroom::find($classroom_id);
+            $users = $classroom->students;
         }
         else
         {
@@ -92,7 +94,6 @@ class NoticeController extends Controller
     {
         if(Auth::guard('admin')->user()->hasPermissionTo('view-notice', 'admin')){
         $this->validate($request,[
-            'Pershkrimi'=> 'required',
             'Nxenesi'=> 'required',
             'Orari'=> 'required',
         ]);

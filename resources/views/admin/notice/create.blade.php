@@ -36,8 +36,17 @@
 
                 <label class="pt-2 mb-0">Arsyeshme</label>
                 <div>
-                    <input type="checkbox"  name="Arsyeshme" value="true" class="@error('Arsyeshme') is-invalid @enderror " id="notice1">
+                    <input type="checkbox"  name="Arsyeshme" value="2" onclick="document.getElementById('notice2').checked = false;"  class="@error('Arsyeshme') is-invalid @enderror " id="notice1">
                     <label class="pt-2 mb-0" for="notice1">Arsyeshme</label>
+                        @if ($errors->has('Arsyeshme'))
+                            <span class="help-block">
+                                <strong class="text-danger"><small>{{ $errors->first('Arsyeshme') }}</small></strong>
+                            </span>
+                        @endif
+                    </div>
+                <div>
+                    <input type="checkbox"  name="Arsyeshme" onclick="document.getElementById('notice1').checked = false;" value="1" class="@error('Arsyeshme') is-invalid @enderror " id="notice2">
+                    <label class="pt-2 mb-0" for="notice2">Pa Arsyeshme</label>
                         @if ($errors->has('Arsyeshme'))
                             <span class="help-block">
                                 <strong class="text-danger"><small>{{ $errors->first('Arsyeshme') }}</small></strong>

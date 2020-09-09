@@ -14,6 +14,30 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <script src="https://kit.fontawesome.com/8a31e3561e.js" crossorigin="anonymous"></script>
 
+    <script>
+        function markAsRead(id)
+        {
+            $.ajax({
+            type:'POST',
+            url:'/markAsRead',
+            data:{
+            "_token": "{{ csrf_token() }}",
+            "id":id
+            },
+            success:function(data)
+            {
+                $('#not'+id+' #notifications span').text('U markua si e lexuar');
+                $('#not'+id+' #notifications span').addClass('text-success');
+                $('#not-number').text($('#not-number').text() - 1 );
+                if($('#not-number').text() == 0)
+                    $('#not-number').hide();
+                setTimeout(function(){
+                $('#not'+id).remove();
+                }, 1000);
+            }
+            });
+        }
+    </script>
     <!-- Styles -->
     @if(Request::url() === route('login'))
     <link href="{{ asset('css/login.css') }}" rel="stylesheet">

@@ -128,9 +128,9 @@
 
                 <tbody>
                     <tr>
-                        <th>{{App\Notice::getNoticesCount($user->id,true)}}</th>
-                        <th>{{App\Notice::getNoticesCount($user->id,false)}}</th>
-                        <th>{{(App\Notice::getNoticesCount($user->id,true) + App\Notice::getNoticesCount($user->id,false))}}</th>
+                        <th>{{App\Notice::getNoticesCount($user->id,2)}}</th>
+                        <th>{{App\Notice::getNoticesCount($user->id,1)}}</th>
+                        <th>{{(App\Notice::getNoticesCount($user->id,2) + App\Notice::getNoticesCount($user->id,1))}}</th>
                       </tr>
                 </tbody>
               </table>

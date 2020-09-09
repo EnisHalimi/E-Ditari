@@ -157,7 +157,12 @@ footer {
   border-top: 1px solid #C1CED9;
   padding: 8px 0;
   text-align: center;
-}</style>
+
+}
+.page-break {
+    page-break-after: always;
+}
+</style>
 </head>
 
 <body>
@@ -408,6 +413,7 @@ footer {
   @else
    Nuk ka nxenes qe nuk vijojne
    @endif
+   <div class="page-break"></div>
   @endforeach
 </body>
 

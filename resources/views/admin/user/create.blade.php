@@ -8,7 +8,9 @@
        <form  method="POST" action="{{ route('admin.user.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="card ml-auto mr-auto p-4 border-left-danger">
-                <h3>Shto nxenes</h3>
+                <h3>Shto @if($user != null) prind per nxenesin {{$user->first_name}} {{$user->surname}}
+                <input type="text" id="parent" name="parent" hidden value="{{$user->id}}">
+                    @else nxenes @endif </h3>
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-12 text-center">
                     <label class="pt-2 mb-0">Emri</label><br />

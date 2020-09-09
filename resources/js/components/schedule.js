@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
         day:      'Dita',
         list:     'Lista'
       },
+      slotMinTime: '08:00:00',
+      slotMaxTime:'14:00:00',
+      weekends: false,
+      firstDay:1,
       allDaySlot: false,
       eventTextColor: 'white',
       navLinks: true,

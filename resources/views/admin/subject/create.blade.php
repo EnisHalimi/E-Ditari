@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('title','Shto Lende')
-@section('classroom','active')
+@section('subject','active')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">

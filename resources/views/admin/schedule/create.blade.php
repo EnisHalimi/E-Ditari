@@ -44,7 +44,7 @@
                       <td> <label class="pt-2 mb-0"  for="admin-h-1">Profesori</label><br/>
                         <select class="text-xs" id="admin-h-1" name="admin-h-1" placeholder="Profesori">
                             @foreach($admins as $admin)
-                                <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                <option value="{{$admin->id}}">{{$admin->name}}</option>
                             @endforeach
                         </select><br/>
                         <label class="pt-2 mb-0"  for="subject-h-1">Lenda</label><br/>
@@ -56,7 +56,7 @@
                       <td> <label class="pt-2 mb-0"  for="admin-mr-1">Profesori</label><br/>
                         <select class="text-xs  " id="admin-mr-1" name="admin-mr-1" placeholder="Profesori">
                             @foreach($admins as $admin)
-                                <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                <option value="{{$admin->id}}">{{$admin->name}}</option>
                             @endforeach
                         </select><br/>
                         <label class="pt-2 mb-0"  for="subject-mr-1">Lenda</label><br/>
@@ -68,7 +68,7 @@
                       <td> <label class="pt-2 mb-0"  for="admin-mk-1">Profesori</label><br/>
                         <select class="text-xs  " id="admin-mk-1" name="admin-mk-1" placeholder="Profesori">
                             @foreach($admins as $admin)
-                                <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                <option value="{{$admin->id}}">{{$admin->name}}</option>
                             @endforeach
                         </select><br/>
                         <label class="pt-2 mb-0"  for="subject-mk-1">Lenda</label><br/>
@@ -80,7 +80,7 @@
                       <td> <label class="pt-2 mb-0"  for="admin-e-1">Profesori</label><br/>
                         <select class="text-xs  " id="admin-e-1" name="admin-e-1" placeholder="Profesori">
                             @foreach($admins as $admin)
-                                <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                <option value="{{$admin->id}}">{{$admin->name}}</option>
                             @endforeach
                         </select><br/>
                         <label class="pt-2 mb-0"  for="subject-e-1">Lenda</label><br/>
@@ -92,7 +92,7 @@
                       <td> <label class="pt-2 mb-0"  for="admin-p-1">Profesori</label><br/>
                         <select class="text-xs  " id="admin-p-1" name="admin-p-1" placeholder="Profesori">
                             @foreach($admins as $admin)
-                                <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                <option value="{{$admin->id}}">{{$admin->name}}</option>
                             @endforeach
                         </select><br/>
                         <label class="pt-2 mb-0"  for="subject-p-1">Lenda</label><br/>
@@ -107,7 +107,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-h-2">Profesori</label><br/>
                           <select class="text-xs  " id="admin-h-2" name="admin-h-2" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-h-2">Lenda</label><br/>
@@ -119,7 +119,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mr-2">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mr-2" name="admin-mr-2" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mr-2">Lenda</label><br/>
@@ -131,7 +131,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mk-2">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mk-2" name="admin-mk-2" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mk-2">Lenda</label><br/>
@@ -143,7 +143,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-e-2">Profesori</label><br/>
                           <select class="text-xs  " id="admin-e-2" name="admin-e-2" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-e-2">Lenda</label><br/>
@@ -155,7 +155,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-p-2">Profesori</label><br/>
                           <select class="text-xs  " id="admin-p-2" name="admin-p-2" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-p-2">Lenda</label><br/>
@@ -170,7 +170,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-h-3">Profesori</label><br/>
                           <select class="text-xs  " id="admin-h-3" name="admin-h-3" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-h-3">Lenda</label><br/>
@@ -182,7 +182,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mr-3">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mr-3" name="admin-mr-3" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mr-3">Lenda</label><br/>
@@ -194,7 +194,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mk-3">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mk-3" name="admin-mk-3" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mk-3">Lenda</label><br/>
@@ -206,7 +206,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-e-3">Profesori</label><br/>
                           <select class="text-xs  " id="admin-e-3" name="admin-e-3" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-e-3">Lenda</label><br/>
@@ -218,7 +218,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-p-3">Profesori</label><br/>
                           <select class="text-xs  " id="admin-p-3" name="admin-p-3" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-p-3">Lenda</label><br/>
@@ -233,7 +233,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-h-4">Profesori</label><br/>
                           <select class="text-xs  " id="admin-h-4" name="admin-h-4" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-h-4">Lenda</label><br/>
@@ -245,7 +245,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mr-4">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mr-4" name="admin-mr-4" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mr-4">Lenda</label><br/>
@@ -257,7 +257,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mk-4">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mk-4" name="admin-mk-4" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mk-4">Lenda</label><br/>
@@ -269,7 +269,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-e-4">Profesori</label><br/>
                           <select class="text-xs  " id="admin-e-4" name="admin-e-4" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-e-4">Lenda</label><br/>
@@ -281,7 +281,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-p-4">Profesori</label><br/>
                           <select class="text-xs  " id="admin-p-4" name="admin-p-4" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-p-4">Lenda</label><br/>
@@ -296,7 +296,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-h-5">Profesori</label><br/>
                           <select class="text-xs  " id="admin-h-5" name="admin-h-5" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-h-5">Lenda</label><br/>
@@ -308,7 +308,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mr-5">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mr-5" name="admin-mr-5" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mr-5">Lenda</label><br/>
@@ -320,7 +320,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-mk-5">Profesori</label><br/>
                           <select class="text-xs  " id="admin-mk-5" name="admin-mk-5" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mk-5">Lenda</label><br/>
@@ -332,7 +332,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-e-5">Profesori</label><br/>
                           <select class="text-xs  " id="admin-e-5" name="admin-e-5" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-e-5">Lenda</label><br/>
@@ -344,7 +344,7 @@
                         <td> <label class="pt-2 mb-0"  for="admin-p-5">Profesori</label><br/>
                           <select class="text-xs  " id="admin-p-5" name="admin-p-5" placeholder="Profesori">
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-p-5">Lenda</label><br/>
@@ -361,7 +361,7 @@
                           <select class="text-xs  " id="admin-h-6" name="admin-h-6" placeholder="Profesori">
                             <option value="jo">Jo</option>
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-h-6">Lenda</label><br/>
@@ -375,7 +375,7 @@
                           <select class="text-xs  " id="admin-mr-6" name="admin-mr-6" placeholder="Profesori">
                             <option value="jo">Jo</option>
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mr-6">Lenda</label><br/>
@@ -389,7 +389,7 @@
                           <select class="text-xs  " id="admin-mk-6" name="admin-mk-6" placeholder="Profesori">
                             <option value="jo">Jo</option>
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-mk-6">Lenda</label><br/>
@@ -403,7 +403,7 @@
                           <select class="text-xs  " id="admin-e-6" name="admin-e-6" placeholder="Profesori">
                             <option value="jo">Jo</option>
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-e-6">Lenda</label><br/>
@@ -417,7 +417,7 @@
                           <select class="text-xs  " id="admin-p-6" name="admin-p-6" placeholder="Profesori">
                             <option value="jo">Jo</option>
                               @foreach($admins as $admin)
-                                  <option value="{{$admin->id}}">{{$admin->full_name}}</option>
+                                  <option value="{{$admin->id}}">{{$admin->name}}</option>
                               @endforeach
                           </select><br/>
                           <label class="pt-2 mb-0"  for="subject-p-6">Lenda</label><br/>

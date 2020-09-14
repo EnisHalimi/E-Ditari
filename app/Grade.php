@@ -81,7 +81,8 @@ class Grade extends Model
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-        return number_format($average,2);
+
+        return round($average,0);
     }
 
     public static function getPeriodAverage($subject,$period,$user,$admin)
@@ -100,6 +101,6 @@ class Grade extends Model
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-        return number_format($average,2);
+        return round($average,0);
     }
 }

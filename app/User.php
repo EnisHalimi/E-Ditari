@@ -117,12 +117,12 @@ class User extends Authenticatable
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-            return number_format($average,2);
+            return round($average,0);
     }
 
     public function getFirstPeriodAverageAttribute()
     {
-        $grades = $this->grades()->where('period','=',1)->get();
+        $grades = $this->grades()->where([['period','=',1],['admin_id','=',Auth::user()->id]])->get();
         $total = 0;
         $average = 0;
         foreach($grades as $grade)
@@ -131,7 +131,7 @@ class User extends Authenticatable
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-        return number_format($average,2);
+        return round($average,0);
     }
 
     public static function countUsers()
@@ -161,7 +161,7 @@ class User extends Authenticatable
 
     public function getSecondPeriodAverageAttribute()
     {
-        $grades = $this->grades()->where('period','=',2)->get();
+        $grades = $this->grades()->where([['period','=',2],['admin_id','=',Auth::user()->id]])->get();
         $total = 0;
         $average = 0;
         foreach($grades as $grade)
@@ -170,12 +170,12 @@ class User extends Authenticatable
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-            return number_format($average,2);
+            return round($average,0);
     }
 
     public function getThirdPeriodAverageAttribute()
     {
-        $grades = $this->grades()->where('period','=',3)->get();
+        $grades = $this->grades()->where([['period','=',3],['admin_id','=',Auth::user()->id]])->get();
         $total = 0;
         $average = 0;
         foreach($grades as $grade)
@@ -184,7 +184,7 @@ class User extends Authenticatable
         }
         if($grades->count() != 0)
             $average = $total/$grades->count();
-            return number_format($average,2);
+            return round($average,0);
     }
 
     public function getAllAbsencesAttribute()
@@ -311,19 +311,19 @@ class User extends Authenticatable
 
     public function getFirstPeriodGradesAttribute()
     {
-        $grades = $this->grades()->where('period','=',1)->get();
+        $grades = $this->grades()->where([['period','=',1],['admin_id','=',Auth::user()->id]])->get();
         return $grades;
     }
 
     public function getSecondPeriodGradesAttribute()
     {
-        $grades = $this->grades()->where('period','=',2)->get();
+        $grades = $this->grades()->where([['period','=',2],['admin_id','=',Auth::user()->id]])->get();
         return $grades;
     }
 
     public function getThirdPeriodGradesAttribute()
     {
-        $grades = $this->grades()->where('period','=',3)->get();
+        $grades = $this->grades()->where([['period','=',3],['admin_id','=',Auth::user()->id]])->get();
         return $grades;
     }
 }

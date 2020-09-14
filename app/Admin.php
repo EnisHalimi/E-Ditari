@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use DB;
 use Auth;
+use App\Classroom;
+use App\Subject;
 
 
 class Admin extends Authenticatable
@@ -94,6 +96,14 @@ class Admin extends Authenticatable
         if($notifications->count() == 0)
                 return 0;
         return $notifications;
+    }
+
+    public static function getSubjectsInClassroom($id,$class_id)
+    {
+        $admin = Admin::find($id);
+        $classroom = Classroom::find($class_id);
+        $subjects = $admin->subjects()->distinct()->get();
+        return $subjects;
     }
 
     public function getNotificationsCountAttribute()

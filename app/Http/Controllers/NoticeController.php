@@ -8,6 +8,7 @@ use App\User;
 use App\Schedule;
 use Auth;
 use App\Classroom;
+use Carbon\Carbon;
 use Redirect,Response;
 
 use function Symfony\Component\VarDumper\Dumper\esc;
@@ -33,9 +34,9 @@ class NoticeController extends Controller
         foreach($schedules as $schedule)
         {
             $data[] = array(
-                'title' => $schedule->subject->name.' | '.$notice->schedule->time,
-                'start' => $notice->schedule->date,
-                'end' => $notice->schedule->date,
+                'title' => $schedule->subject->name.' | '.$schedule->time,
+                'start' => $schedule->date,
+                'end' => $schedule->date,
                 'backgroundColor' => '#1cc88a',
                 'borderColor' =>  '$3a3b45'
             );
@@ -64,11 +65,13 @@ class NoticeController extends Controller
     public function create(Request $request)
     {
         $classroom_id = $request->classroom_id;
+        $today = Carbon::now();
         if($classroom_id != null)
         {
             $schedules = Schedule::where([
                 ['school_id','=',Auth::user()->school_id],
                 ['classroom_id','=',$classroom_id],
+                ['date','=',$today->toDateString()],
             ])->get();
             $classroom = Classroom::find($classroom_id);
             $users = $classroom->students;
@@ -78,8 +81,9 @@ class NoticeController extends Controller
             $schedules = Schedule::where('school_id','=',Auth::user()->school_id)->get();
             $users = User::where('school_id','=',Auth::user()->school_id)->get();
         }
+
         if(Auth::guard('admin')->user()->hasPermissionTo('create-notice', 'admin'))
-            return view('admin.notice.create')->with('schedules',$schedules)->with('users',$users);
+            return view('admin.notice.create')->with('schedules',$schedules)->with('users',$users)->with('munges',$request->munges);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }

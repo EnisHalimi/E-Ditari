@@ -42,7 +42,7 @@ class ScheduleController extends Controller
         if(Auth::guard('admin')->user()->hasPermissionTo('create-schedule', 'admin'))
         {
             $classroom = Classroom::find($request->classroom_id);
-            $schedules =DB::table('schedules')->where([['date', '=', $request->date],['classroom_id','=',$classroom->id]])->delete();
+            $schedules = DB::table('schedules')->where([['date', '=', $request->date],['classroom_id','=',$classroom->id]])->delete();
             $students = $classroom->users()->get();
             foreach($students as $student)
             {
@@ -107,6 +107,7 @@ class ScheduleController extends Controller
             $start_date = new Carbon($request->input('start-date'));
             $date = new Carbon ($request->input('start-date'));
             $end_date = new Carbon($request->input('end-date'));
+            $deletedRow = Schedule::where('school_id','=',Auth::user()->school_id)->whereBetween('date',  [$start_date, $end_date])->delete();
            while($date->lessThan($end_date)) {
                 if($date->isMonday())
                 {
@@ -118,6 +119,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-h-1');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-h-1'));
+                    $subject = Subject::find($request->input('subject-h-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '09:00:00';
@@ -126,6 +130,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-h-2');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-h-2'));
+                    $subject = Subject::find($request->input('subject-h-2'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '10:00:00';
@@ -134,6 +141,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-h-3');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-h-3'));
+                    $subject = Subject::find($request->input('subject-h-3'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '11:00:00';
@@ -142,6 +152,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-h-4');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-h-4'));
+                    $subject = Subject::find($request->input('subject-h-4'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '12:00:00';
@@ -150,6 +163,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-h-5');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-h-5'));
+                    $subject = Subject::find($request->input('subject-h-5'));
+                    $admin->subjects()->attach($subject);
                     if($request->input('admin-h-6') != 'jo' || $request->input('subject-h-6') != 'jo')
                     {
                         $schedule = new Schedule;
@@ -160,6 +176,10 @@ class ScheduleController extends Controller
                         $schedule->subject_id = $request->input('subject-h-6');
                         $schedule->school_id = Auth::user()->school_id;
                         $schedule->save();
+
+                        $admin = Admin::find($request->input('admin-h-6'));
+                        $subject = Subject::find($request->input('subject-h-6'));
+                        $admin->subjects()->attach($subject);
                     }
                 }
                 elseif($date->isTuesday())
@@ -172,6 +192,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mr-1');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mr-1'));
+                    $subject = Subject::find($request->input('subject-mr-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '09:00:00';
@@ -180,6 +203,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mr-2');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mr-1'));
+                    $subject = Subject::find($request->input('subject-mr-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '10:00:00';
@@ -188,6 +214,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mr-3');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mr-1'));
+                    $subject = Subject::find($request->input('subject-mr-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '11:00:00';
@@ -196,6 +225,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mr-4');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mr-1'));
+                    $subject = Subject::find($request->input('subject-mr-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '12:00:00';
@@ -204,6 +236,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mr-5');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mr-1'));
+                    $subject = Subject::find($request->input('subject-mr-1'));
+                    $admin->subjects()->attach($subject);
                     if($request->input('admin-mr-6') != 'jo' || $request->input('subject-mr-6') != 'jo')
                     {
                         $schedule = new Schedule;
@@ -214,6 +249,9 @@ class ScheduleController extends Controller
                         $schedule->subject_id = $request->input('subject-mr-6');
                         $schedule->school_id = Auth::user()->school_id;
                         $schedule->save();
+                        $admin = Admin::find($request->input('admin-mr-1'));
+                        $subject = Subject::find($request->input('subject-mr-1'));
+                        $admin->subjects()->attach($subject);
                     }
                 }
                 elseif($date->isWednesday())
@@ -226,6 +264,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mk-1');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mk-1'));
+                    $subject = Subject::find($request->input('subject-mk-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '09:00:00';
@@ -234,6 +275,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mk-2');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mk-1'));
+                    $subject = Subject::find($request->input('subject-mk-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '10:00:00';
@@ -242,6 +286,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mk-3');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mk-1'));
+                    $subject = Subject::find($request->input('subject-mk-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '11:00:00';
@@ -250,6 +297,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mk-4');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mk-1'));
+                    $subject = Subject::find($request->input('subject-mk-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '12:00:00';
@@ -258,6 +308,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-mk-5');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-mk-1'));
+                    $subject = Subject::find($request->input('subject-mk-1'));
+                    $admin->subjects()->attach($subject);
                     if($request->input('admin-mk-6') != 'jo' || $request->input('subject-mk-6') != 'jo')
                     {
                         $schedule = new Schedule;
@@ -268,6 +321,9 @@ class ScheduleController extends Controller
                         $schedule->subject_id = $request->input('subject-mk-6');
                         $schedule->school_id = Auth::user()->school_id;
                         $schedule->save();
+                        $admin = Admin::find($request->input('admin-mk-1'));
+                        $subject = Subject::find($request->input('subject-mk-1'));
+                        $admin->subjects()->attach($subject);
                     }
                 }
                 elseif($date->isThursday())
@@ -280,6 +336,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-e-1');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-e-1'));
+                    $subject = Subject::find($request->input('subject-e-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '09:00:00';
@@ -288,6 +347,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-e-2');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-e-1'));
+                    $subject = Subject::find($request->input('subject-e-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '10:00:00';
@@ -296,6 +358,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-e-3');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-e-1'));
+                    $subject = Subject::find($request->input('subject-e-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '11:00:00';
@@ -304,6 +369,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-e-4');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-e-1'));
+                    $subject = Subject::find($request->input('subject-e-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '12:00:00';
@@ -312,6 +380,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-e-5');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-e-1'));
+                    $subject = Subject::find($request->input('subject-e-1'));
+                    $admin->subjects()->attach($subject);
                     if($request->input('admin-e-6') != 'jo' || $request->input('subject-e-6') != 'jo')
                     {
                         $schedule = new Schedule;
@@ -322,6 +393,9 @@ class ScheduleController extends Controller
                         $schedule->subject_id = $request->input('subject-e-6');
                         $schedule->school_id = Auth::user()->school_id;
                         $schedule->save();
+                        $admin = Admin::find($request->input('admin-e-1'));
+                        $subject = Subject::find($request->input('subject-e-1'));
+                        $admin->subjects()->attach($subject);
                     }
                 }
                 elseif($date->isFriday())
@@ -334,6 +408,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-p-1');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-p-1'));
+                    $subject = Subject::find($request->input('subject-p-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '09:00:00';
@@ -342,6 +419,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-p-2');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-p-1'));
+                    $subject = Subject::find($request->input('subject-p-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '10:00:00';
@@ -350,6 +430,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-p-3');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-p-1'));
+                    $subject = Subject::find($request->input('subject-p-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '11:00:00';
@@ -358,6 +441,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-p-4');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-p-1'));
+                    $subject = Subject::find($request->input('subject-p-1'));
+                    $admin->subjects()->attach($subject);
                     $schedule = new Schedule;
                     $schedule->date = $date;
                     $schedule->time = '12:00:00';
@@ -366,6 +452,9 @@ class ScheduleController extends Controller
                     $schedule->subject_id = $request->input('subject-p-5');
                     $schedule->school_id = Auth::user()->school_id;
                     $schedule->save();
+                    $admin = Admin::find($request->input('admin-p-1'));
+                    $subject = Subject::find($request->input('subject-p-1'));
+                    $admin->subjects()->attach($subject);
                     if($request->input('admin-p-6') != 'jo' || $request->input('subject-p-6') != 'jo')
                     {
                         $schedule = new Schedule;
@@ -376,6 +465,9 @@ class ScheduleController extends Controller
                         $schedule->subject_id = $request->input('subject-p-6');
                         $schedule->school_id = Auth::user()->school_id;
                         $schedule->save();
+                        $admin = Admin::find($request->input('admin-p-1'));
+                        $subject = Subject::find($request->input('subject-p-1'));
+                        $admin->subjects()->attach($subject);
                     }
                 }
                 elseif($date->isSaturday())

@@ -9649,6 +9649,43 @@ var flushToDom = FullCalendarVDom.flushToDom;
 
 /***/ }),
 
+/***/ "./node_modules/@fullcalendar/core/locales/sq.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/@fullcalendar/core/locales/sq.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var sq = {
+  code: "sq",
+  week: {
+    dow: 1, // Monday is the first day of the week.
+    doy: 4  // The week that contains Jan 4th is the first week of the year.
+  },
+  buttonText: {
+    prev: "mbrapa",
+    next: "Përpara",
+    today: "sot",
+    month: "Muaj",
+    week: "Javë",
+    day: "Ditë",
+    list: "Listë"
+  },
+  weekText: "Ja",
+  allDayText: "Gjithë ditën",
+  moreLinkText: function(n) {
+    return "+më tepër " + n;
+  },
+  noEventsText: "Nuk ka evente për të shfaqur"
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (sq);
+
+
+/***/ }),
+
 /***/ "./node_modules/@fullcalendar/core/main.js":
 /*!*************************************************!*\
   !*** ./node_modules/@fullcalendar/core/main.js ***!
@@ -66805,6 +66842,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
 /* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
+/* harmony import */ var _fullcalendar_core_locales_sq__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fullcalendar/core/locales/sq */ "./node_modules/@fullcalendar/core/locales/sq.js");
+
 
 
 
@@ -66813,13 +66852,22 @@ if (window.location.href.indexOf("calendar") > -1) {
     var calendarEl = document.getElementById('calendar');
     var calendar = new _fullcalendar_core__WEBPACK_IMPORTED_MODULE_0__["Calendar"](calendarEl, {
       plugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1__["default"]],
-      buttonText: {
-        today: 'Sot',
-        month: 'Muaji',
-        week: 'Java',
-        day: 'Dita',
-        list: 'Lista'
+      locale: _fullcalendar_core_locales_sq__WEBPACK_IMPORTED_MODULE_2__["default"],
+      header: {
+        left: 'prev,next,today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
       },
+      buttonText: {
+        prev: "Mbrapa",
+        next: "Përpara",
+        today: "Sot",
+        month: "Muaj",
+        week: "Javë",
+        day: "Ditë",
+        list: "Listë"
+      },
+      weekends: false,
       eventTextColor: 'white',
       navLinks: true,
       events: '/getNotices'
@@ -78354,6 +78402,8 @@ if (window.location.href.indexOf("login") > -1) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
 /* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/main.js");
+/* harmony import */ var _fullcalendar_core_locales_sq__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fullcalendar/core/locales/sq */ "./node_modules/@fullcalendar/core/locales/sq.js");
+
 
 
 
@@ -78363,6 +78413,7 @@ if (window.location.href.indexOf("schedule") > -1) {
     var id = document.getElementById('classroom-id').value;
     var calendar = new _fullcalendar_core__WEBPACK_IMPORTED_MODULE_0__["Calendar"](calendarEl, {
       plugins: [_fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_1__["default"]],
+      locale: _fullcalendar_core_locales_sq__WEBPACK_IMPORTED_MODULE_2__["default"],
       timeZone: 'UTC',
       initialView: 'timeGridWeek',
       headerToolbar: {
@@ -78371,11 +78422,13 @@ if (window.location.href.indexOf("schedule") > -1) {
         right: 'timeGridWeek,timeGridDay'
       },
       buttonText: {
-        today: 'Sot',
-        month: 'Muaji',
-        week: 'Java',
-        day: 'Dita',
-        list: 'Lista'
+        prev: "Mbrapa",
+        next: "Përpara",
+        today: "Sot",
+        month: "Muaj",
+        week: "Javë",
+        day: "Ditë",
+        list: "Listë"
       },
       slotMinTime: '08:00:00',
       slotMaxTime: '14:00:00',

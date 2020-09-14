@@ -174,7 +174,8 @@ class AdminController extends Controller
             $admin->city = $request->input('Qyteti');
             $admin->residence = $request->input('Vendbanimi');
             $admin->phone_nr = $request->input('Nr_Telefonit');
-            $admin->grade =  $request->input('Roli');
+            if($admin->grade != "Super Admin")
+                $admin->grade =  $request->input('Roli');
             $admin->gender = $request->input('Gjinia');
             $admin->school_id = Auth::guard('admin')->user()->school_id;
             $admin->email = $request->input('email');

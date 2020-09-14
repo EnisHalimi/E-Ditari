@@ -101,18 +101,18 @@
               <div class="card-body">
                 <ul class="nav nav-tabs">
                     @foreach(App\Classroom::getSubjects(Auth::user()->id, $classroom->id) as $subject)
-                        <li class="nav-item active "><a class="nav-link" data-toggle="tab" href="#{{$subject->subject->name}}">{{$subject->subject->name}}</a></li>
+                        <li class="nav-item active "><a class="nav-link" data-toggle="tab" href="#content{{$subject->subject->id}}">{{$subject->subject->name}}</a></li>
                     @endforeach
                   </ul>
 
                   <div class="tab-content mt-2">
                     @foreach(App\Classroom::getSubjects(Auth::user()->id, $classroom->id) as $subject)
-                  <div id="{{$subject->subject->name}}" class="tab-pane fade">
+                  <div id="content{{$subject->subject->id}}" class="tab-pane fade">
 
                     <div class="table-responsive">
                         <table
-                          class="table table-bordered"
-                          id="dataTable"
+                          class="display table table-bordered"
+						  id="dataTable{{$subject->subject->id}}"
                           width="100%"
                           cellspacing="0"
                         >
@@ -156,14 +156,14 @@
                                         <td> </td>
                                     @endif
                                     <td>{{App\Grade::getPeriodAverage($subject->subject->id,1, $user->id,Auth::user()->id)}}
-                                        <a href="#" data-toggle="modal" data-target="#periodOne{{$subject->subject->name}}{{$user->id}}">
+                                        <a href="#" data-toggle="modal" data-target="#periodOne{{$subject->subject->id}}{{$user->id}}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <div class="modal fade" id="periodOne{{$subject->subject->name}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodOneLabel{{$subject->subject->name}}{{$user->id}}" aria-hidden="true">
+                                        <div class="modal fade" id="periodOne{{$subject->subject->id}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodOneLabel{{$subject->subject->id}}{{$user->id}}" aria-hidden="true">
                                             <div class="modal-dialog " role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="periodOneLabel{{$subject->subject->name}}{{$user->id}}">Periudha e pare</h5>
+                                                <h5 class="modal-title" id="periodOneLabel{{$subject->subject->id}}{{$user->id}}">Periudha e pare</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>

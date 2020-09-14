@@ -18,9 +18,7 @@
             <h3>Ndrysho Orarin</h3>
             <label class="pt-2 mb-0" for="classroom">Klasa</label>
             <select class=" @error('Klasa') is-invalid @enderror" id="classroom" name="Klasa" placeholder="Klasa">
-                @foreach($classrooms as $classroom)
-                    <option @if($schedule->classroom_id == $classroom->id) selected @endif value="{{$classroom->id}}">{{$classroom->class_name}}</option>
-                @endforeach
+                <option value="{{$classroom->id}}">{{$classroom->class_name}}</option>
             </select>
                 @if ($errors->has('Klasa'))
                     <span class="help-block">

@@ -5,7 +5,7 @@
 <div
   class="d-sm-flex align-items-center justify-content-between mb-4"
 >
-<a href="klaset.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kthehu</a>
+<a href="/admin" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kthehu</a>
   <h1 class="h3 mb-0 text-gray-800  ml-auto mr-auto">Shkollat</h1>
   <a
     href="#"
@@ -17,7 +17,7 @@
 
 <div class="row">
 
-
+    @if(Auth::user()->email == "superadmin@gmail.com")
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body">
@@ -34,6 +34,7 @@
         </div>
       </div>
     </div>
+    @endif
 
 </div>
 
@@ -84,12 +85,12 @@
             <td>{{ $school->address}}</td>
             <td>{{$school->city}}</td>
             <td><a class="btn btn-primary btn-circle" href="{{route('admin.school.edit',$school->id)}}"><i class="far fa-eye"></i></a>
-                <form class="d-inline" id="delete{{$school->id}}" method="POST" action="{{ route('admin.school.destroy',$school->id)}}" accept-charset="UTF-8">
+                @if(Auth::user()->email == "superadmin@gmail.com") <form class="d-inline" id="delete{{$school->id}}" method="POST" action="{{ route('admin.school.destroy',$school->id)}}" accept-charset="UTF-8">
                         {{ csrf_field() }}
                         <input name="_method" type="hidden" value="DELETE">
                     </form>
                     <button type="submit" form="delete{{$school->id}}" class="btn btn-danger btn-circle" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-
+                @endif
                   </td>
           </tr>
           @endforeach

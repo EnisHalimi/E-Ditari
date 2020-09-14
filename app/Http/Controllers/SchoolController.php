@@ -15,8 +15,11 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = School::all();
-        if(Auth::guard('admin')->user()->hasPermissionTo('view-school', 'admin'))
+        if(Auth::user()->email == "superadmin@gmail.com")
+            $schools = School::all();
+        else
+            $schools = School::where('id','=',Auth::user()->school_id)->get();
+        if(Auth::guard('admin')->user()->hasPermissionTo('view-school', 'admin')  || Auth::user()->email == "superadmin@gmail.com" )
             return view('admin.school.index')->with('schools',$schools);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
@@ -29,7 +32,7 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin'))
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin') &&  Auth::user()->email == "superadmin@gmail.com")
             return view('admin.school.create');
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
@@ -43,7 +46,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin')){
+        if(Auth::guard('admin')->user()->hasPermissionTo('create-school', 'admin') || Auth::user()->email == "superadmin@gmail.com"){
             $this->validate($request,[
                 'Qyteti'=> 'required|string|min:2',
                 'Emri'=> 'required|string|min:2',
@@ -84,7 +87,7 @@ class SchoolController extends Controller
     public function edit($id)
     {
         $school = School::find($id);
-        if(Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin'))
+        if((Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin') && Auth::user()->school_id == $id) || Auth::user()->email == "superadmin@gmail.com" )
             return view('admin.school.edit')->with('school',$school);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
@@ -99,7 +102,7 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin')){
+        if((Auth::guard('admin')->user()->hasPermissionTo('edit-school', 'admin') && Auth::user()->school_id == $id) || Auth::user()->email == "superadmin@gmail.com" ){
             $this->validate($request,[
                 'Qyteti'=> 'required|string|min:2',
                 'Emri'=> 'required|string|min:2',
@@ -128,7 +131,7 @@ class SchoolController extends Controller
      */
     public function destroy($id)
     {
-        if(Auth::guard('admin')->user()->hasPermissionTo('delete-school', 'admin'))
+        if(Auth::user()->email == "superadmin@gmail.com")
         {
             $school = School::find($id);
             $school->delete();

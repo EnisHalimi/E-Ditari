@@ -531,12 +531,12 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
-        $subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
-        $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
         $schedule = Schedule::find($id);
+        $classroom = Classroom::find($schedule->classroom_id);
+        $subjects = Subject::where([['school_id','=',Auth::user()->school_id],['year','=',$classroom->year]])->get();
+        $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
         if(Auth::guard('admin')->user()->hasPermissionTo('edit-schedule', 'admin'))
-            return view('admin.schedule.edit')->with('schedule',$schedule)->with('classrooms',$classrooms)->with('subjects',$subjects)->with('admins',$admins);
+            return view('admin.schedule.edit')->with('schedule',$schedule)->with('classroom',$classroom)->with('subjects',$subjects)->with('admins',$admins);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }

@@ -48,6 +48,23 @@
         <strong class="text-danger"><small>{{ $errors->first('Qyteti') }}</small></strong>
     </span>
 @endif
+<label class="pt-2 mb-0">E-mail i drejtorit</label>
+          <input  id="email" name="email" value="{{ old('email') }}" required type="email" class=" @error('email') is-invalid @enderror" placeholder="Email Adresa">
+          @if ($errors->has('email'))
+              <span class="help-block">
+                  <strong class="text-danger"><small>>{{ $errors->first('email') }}</small></strong>
+              </span>
+          @endif
+          <label class="pt-2 mb-0">Password i drejtorit</label>
+          <input id="password" name="password" required type="password" class=" @error('password') is-invalid @enderror"  placeholder="Password">
+
+          @if ($errors->has('password'))
+                          <span class="help-block">
+                              <strong class="text-danger"><small>{{ $errors->first('password') }}</small></strong>
+                          </span>
+                      @endif
+          <label class="pt-2 mb-0">Përsërit Password</label>
+          <input id="password-confirm" name="password_confirmation" required type="password" class=" @error('password') is-invalid @enderror" placeholder="Përsërit Password">
 
     <button class="btn btn-primary mt-3" type="submit">Krijo shkollën</button>
  </div>

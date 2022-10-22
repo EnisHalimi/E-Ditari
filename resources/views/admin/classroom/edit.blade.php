@@ -4,7 +4,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-       <form  method="POST" action="{{ route('admin.classroom.update',$classroom->id) }}" enctype="multipart/form-data">
+		<form class="d-inline" id="delete" method="POST" action="{{ route('admin.classroom.destroy',$classroom->id)}}" accept-charset="UTF-8">
+			{{ csrf_field() }}
+			<input name="_method" type="hidden" value="DELETE">
+		</form>
+       <form id="edit" method="POST" action="{{ route('admin.classroom.update',$classroom->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div  style="width: 20rem;" class="card ml-auto mr-auto p-4 border-left-danger">
@@ -34,7 +38,12 @@
                     <strong class="text-danger"><small>{{ $errors->first('Kujdestari') }}</small></strong>
                 </span>
             @endif
-               <button class="btn btn-primary mt-3" type="submit">Ndrysho klasën</button>
+                 <div class="row justify-content-around">
+                  <button form="edit" class="btn btn-info mt-3" type="submit">
+                    Ndrysho
+                  </button>
+                  <button type="submit" form="delete" class="btn btn-danger mt-3" onclick="return confirm('Are you sure?')">Fshij</button>
+                </div>
             </div>
               </form>
     </div>

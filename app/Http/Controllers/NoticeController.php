@@ -72,6 +72,7 @@ class NoticeController extends Controller
                 ['school_id','=',Auth::user()->school_id],
                 ['classroom_id','=',$classroom_id],
                 ['date','=',$today->toDateString()],
+                ['admin_id','=',Auth::user()->id]
             ])->get();
             $classroom = Classroom::find($classroom_id);
             $users = $classroom->students;
@@ -102,8 +103,15 @@ class NoticeController extends Controller
             'Orari'=> 'required',
         ]);
         $notice = new Notice;
-        $notice->description = $request->input('Pershkrimi');
-        $notice->user_id = $request->input('Nxenesi');
+		if($request->input('Pershkrimi') == null && $request->input('Arsyeshme') == 0)
+			$notice->description = "Veretje";
+		else if($request->input('Pershkrimi') == null && $request->input('Arsyeshme') == 1)
+			$notice->description = "Mungese";
+		else if($request->input('Pershkrimi') == null && $request->input('Arsyeshme') == 2)
+			$notice->description = "Mungese";
+		else
+			$notice->description = $request->input('Pershkrimi');
+		$notice->user_id = $request->input('Nxenesi');
         $notice->arsyeshme = $request->input('Arsyeshme');
         $notice->schedule_id = $request->input('Orari');
         $notice->school_id = Auth::user()->school_id;
@@ -137,11 +145,22 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        $users = User::where('school_id','=',Auth::user()->school_id)->get();
-        $schedules = Schedule::where('school_id','=',Auth::user()->school_id)->get();
         $notice = Notice::find($id);
-        if(Auth::guard('admin')->user()->hasPermissionTo('edit-notice', 'admin'))
-            return view('admin.notice.edit')->with('schedules',$schedules)->with('users',$users)->with('notice',$notice);
+        $today = Carbon::now();
+        $schedules = Schedule::where([
+            ['school_id','=',Auth::user()->school_id],
+            ['classroom_id','=',$notice->schedule->classroom_id],
+            ['date','=',$today->toDateString()],
+            ['admin_id','=',Auth::user()->id]
+        ])->get();
+        $classroom = Classroom::find($notice->schedule->classroom_id);
+        $users = $classroom->students;
+		if($notice->arsyeshme == 0)
+			$munges = false;
+		else
+			$munges = true;
+        if(Auth::guard('admin')->user()->hasPermissionTo('edit-notice', 'admin') &&  Auth::user()->id == $notice->schedule->admin_id)
+            return view('admin.notice.edit')->with('schedules',$schedules)->with('users',$users)->with('notice',$notice)->with('munges',$munges);
         else
             return redirect(route('admin.home'))->with('error',__('messages.noauthorization'));
     }
@@ -181,8 +200,9 @@ class NoticeController extends Controller
      */
     public function destroy($id)
     {
-        if(Auth::guard('admin')->user()->hasPermissionTo('delete-notice', 'admin')){
-            $notice = Notice::find($id);
+        $notice = Notice::find($id);
+        $classroom = Classroom::find($notice->schedule->classroom_id);
+        if(Auth::guard('admin')->user()->hasPermissionTo('delete-notice', 'admin') &&  Auth::user()->id == $notice->schedule->admin_id){
             $notice->delete();
             return redirect()->back()->with('success',__('messages.notice-delete'));
         }

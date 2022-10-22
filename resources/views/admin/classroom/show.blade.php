@@ -94,20 +94,21 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
               <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">
+                <h6 class="m-0 font-weight-bold text-primary float-left">
                   Ditari
                 </h6>
+				<a href="/admin/classroom/{{$classroom->id}}/edit" class="float-right">Ndrysho Klasen</a>
               </div>
               <div class="card-body">
                 <ul class="nav nav-tabs">
                     @foreach(App\Classroom::getSubjects(Auth::user()->id, $classroom->id) as $subject)
-                        <li class="nav-item active "><a class="nav-link" data-toggle="tab" href="#content{{$subject->subject->id}}">{{$subject->subject->name}}</a></li>
+                        <li class="nav-item "><a class="nav-link" data-toggle="tab" href="#content{{$subject->subject->id}}">{{$subject->subject->name}}</a></li>
                     @endforeach
                   </ul>
 
                   <div class="tab-content mt-2">
                     @foreach(App\Classroom::getSubjects(Auth::user()->id, $classroom->id) as $subject)
-                  <div id="content{{$subject->subject->id}}" class="tab-pane fade">
+                  <div id="content{{$subject->subject->id}}" class="tab-pane fade @if ($loop->first)show active @endif">
 
                     <div class="table-responsive">
                         <table
@@ -208,14 +209,14 @@
                                         <td> </td>
                                     @endif
                                     <td>{{App\Grade::getPeriodAverage($subject->subject->id,2, $user->id,Auth::user()->id)}}
-                                        <a href="#" data-toggle="modal" data-target="#periodTwo{{$subject->subject->name}}{{$user->id}}">
+                                        <a href="#" data-toggle="modal" data-target="#periodTwo{{$subject->subject->id}}{{$user->id}}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <div class="modal fade" id="periodTwo{{$subject->subject->name}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodTwoLabel{{$subject->subject->name}}{{$user->id}}" aria-hidden="true">
+                                        <div class="modal fade" id="periodTwo{{$subject->subject->id}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodTwoLabel{{$subject->subject->id}}{{$user->id}}" aria-hidden="true">
                                             <div class="modal-dialog " role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="periodTwoLabel{{$subject->subject->name}}{{$user->id}}">Periudha e dyte</h5>
+                                                <h5 class="modal-title" id="periodTwoLabel{{$subject->subject->id}}{{$user->id}}">Periudha e dyte</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -260,14 +261,14 @@
                                       <td> </td>
                                   @endif
                                   <td>{{App\Grade::getPeriodAverage($subject->subject->id,3, $user->id,Auth::user()->id)}}
-                                      <a href="#" data-toggle="modal" data-target="#periodThree{{$subject->subject->name}}{{$user->id}}">
+                                      <a href="#" data-toggle="modal" data-target="#periodThree{{$subject->subject->id}}{{$user->id}}">
                                           <i class="fas fa-edit"></i>
                                       </a>
-                                      <div class="modal fade" id="periodThree{{$subject->subject->name}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodThreeLabel{{$subject->subject->name}}{{$user->id}}" aria-hidden="true">
+                                      <div class="modal fade" id="periodThree{{$subject->subject->id}}{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="periodThreeLabel{{$subject->subject->id}}{{$user->id}}" aria-hidden="true">
                                           <div class="modal-dialog " role="document">
                                           <div class="modal-content">
                                               <div class="modal-header">
-                                              <h5 class="modal-title" id="periodThreeLabel{{$subject->subject->name}}{{$user->id}}">Periudha e trete</h5>
+                                              <h5 class="modal-title" id="periodThreeLabel{{$subject->subject->id}}{{$user->id}}">Periudha e trete</h5>
                                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                   <span aria-hidden="true">&times;</span>
                                               </button>
@@ -307,19 +308,20 @@
                                       <div class="modal-dialog " role="document">
                                       <div class="modal-content">
                                           <div class="modal-header">
-                                          <h5 class="modal-title" id="absencesLabel{{$user->id}}">Mungesat</h5>
+                                          <h5 class="modal-title" id="absencesLabel{{$user->id}}">Mungesat/Vëretjet</h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                           </button>
                                           </div>
                                           <div class="modal-body">
                                               <table id="dataTable" class="table">
+                                                  @if($user->all_absences>0)
                                                   <tbody>
                                                       @foreach($user->absences as $notice)
                                                       <tr>
                                                           <th scope="col">{{$notice->schedule->subject->name}}</th>
                                                           <th>{{$notice->schedule->date}}</th>
-                                                          <th>@if($notice->arsyeshme ==2) Arsyeshme @else Pa Arsyeshme @endif</th>
+                                                          <th>@if($notice->arsyeshme ==2) Arsyeshme @elseif($notice->arsyeshme ==1) Pa Arsyeshme @else Vëretje @endif</th>
                                                           <th><a class="btn btn-primary btn-circle" href="{{route('admin.notice.edit',$notice->id)}}"><i class="far fa-edit"></i></a>
                                                               <form class="d-inline" id="deleteNotice{{$subject->subject->name}}{{$notice->id}}" method="POST" action="{{ route('admin.notice.destroy',$notice->id)}}" accept-charset="UTF-8">
                                                                   {{ csrf_field() }}
@@ -330,6 +332,7 @@
                                                       </tr>
                                                     @endforeach
                                                   </tbody>
+                                                  @endif
                                                 </table>
                                           </div>
                                           <div class="modal-footer">

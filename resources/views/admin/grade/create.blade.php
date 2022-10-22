@@ -25,7 +25,7 @@
             <label class="pt-2 mb-0">Lenda</label>
             <select class=" @error('Lenda') is-invalid @enderror" id="subject" name="Lenda" placeholder="Lenda">
                 @foreach($subjects as $subject)
-                    <option value="{{$subject->id}}">{{$subject->name}}</option>
+                    <option value="{{$subject->subject->id}}">{{$subject->subject->name}}</option>
                 @endforeach
             </select>
             @if ($errors->has('Lenda'))

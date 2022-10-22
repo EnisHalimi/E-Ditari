@@ -38,17 +38,20 @@ class GradeController extends Controller
         {
             $classrooms = Classroom::where('id','=',$classroom_id)->get();
             $classroom = Classroom::find($classroom_id);
+			$sub = $classroom->schedules()->select('subject_id', 'admin_id')->distinct()->get();
+			$subjects = $sub->where('admin_id','=',Auth::user()->id);
             $users = $classroom->students;
+			$admins = Admin::where('id','=',Auth::user()->id)->get();
         }
         else
         {
             $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
             $users = User::where('school_id','=',Auth::user()->school_id)->get();
-
+			$subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
+			$admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
 
         }
-        $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
-        $subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
+
         if(Auth::guard('admin')->user()->hasPermissionTo('create-grade', 'admin'))
             return view('admin.grade.create')->with('users',$users)->with('admins',$admins)->with('subjects',$subjects)->with('classrooms',$classrooms);
         else
@@ -111,10 +114,10 @@ class GradeController extends Controller
     public function edit($id)
     {
         $grade = Grade::find($id);
-        $users = User::where('school_id','=',Auth::user()->school_id)->get();
-        $admins = Admin::where('school_id','=',Auth::user()->school_id)->get();
-        $subjects = Subject::where('school_id','=',Auth::user()->school_id)->get();
-        $classrooms = Classroom::where('school_id','=',Auth::user()->school_id)->get();
+        $users = User::where('id','=',$grade->user_id)->get();
+        $admins = Admin::where('id','=',$grade->admin_id)->get();
+        $subjects = Subject::where('id','=',$grade->subject_id)->get();
+        $classrooms = Classroom::where('id','=',$grade->classroom_id)->get();
         if(Auth::guard('admin')->user()->hasPermissionTo('edit-grade', 'admin'))
             return view('admin.grade.edit')->with('grade',$grade)->with('users',$users)->with('admins',$admins)->with('subjects',$subjects)->with('classrooms',$classrooms);
         else

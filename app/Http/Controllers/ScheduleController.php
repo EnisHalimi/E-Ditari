@@ -104,10 +104,19 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         if(Auth::guard('admin')->user()->hasPermissionTo('create-schedule', 'admin')){
+			 $this->validate($request,[
+                'start-date'	=> 	'required|date',
+                'end-date'		=> 	'required|date|after_or_equal:start-date',
+            ]);
             $start_date = new Carbon($request->input('start-date'));
             $date = new Carbon ($request->input('start-date'));
             $end_date = new Carbon($request->input('end-date'));
-            $deletedRow = Schedule::where('school_id','=',Auth::user()->school_id)->whereBetween('date',  [$start_date, $end_date])->delete();
+            $deletedRow = Schedule::where('school_id','=',Auth::user()->school_id)->whereBetween('date',  [$start_date, $end_date])->get();
+            foreach($deletedRow as $schedule)
+            {
+                $schedule->notices()->delete();
+                $schedule->delete();
+            }
            while($date->lessThan($end_date)) {
                 if($date->isMonday())
                 {

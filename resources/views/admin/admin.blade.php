@@ -10,7 +10,7 @@
         <h1>Mir se vini ne platformen online</h1>
         <a
           class="navbar-brand d-flex align-items-center justify-content-center"
-          href="index.html"
+          href="/admin"
         >
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-lightbulb"></i>

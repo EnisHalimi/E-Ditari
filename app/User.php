@@ -189,13 +189,13 @@ class User extends Authenticatable
 
     public function getAllAbsencesAttribute()
     {
-        $absences = $this->notices()->where('arsyeshme','!=',0)->count();
+        $absences = $this->notices()->count();
         return $absences;
     }
 
     public function getAbsencesAttribute()
     {
-        $absences = $this->notices()->where('arsyeshme','!=',0)->get();
+        $absences = $this->notices()->get();
         return $absences;
     }
 

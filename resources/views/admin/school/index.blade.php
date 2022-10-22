@@ -17,7 +17,7 @@
 
 <div class="row">
 
-    @if(Auth::user()->email == "superadmin@gmail.com")
+    @if(Auth::user()->email ==  env('APP_SA'))
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body">
@@ -85,7 +85,7 @@
             <td>{{ $school->address}}</td>
             <td>{{$school->city}}</td>
             <td><a class="btn btn-primary btn-circle" href="{{route('admin.school.edit',$school->id)}}"><i class="far fa-eye"></i></a>
-                @if(Auth::user()->email == "superadmin@gmail.com") <form class="d-inline" id="delete{{$school->id}}" method="POST" action="{{ route('admin.school.destroy',$school->id)}}" accept-charset="UTF-8">
+                @if(Auth::user()->email ==  env('APP_SA')) <form class="d-inline" id="delete{{$school->id}}" method="POST" action="{{ route('admin.school.destroy',$school->id)}}" accept-charset="UTF-8">
                         {{ csrf_field() }}
                         <input name="_method" type="hidden" value="DELETE">
                     </form>
